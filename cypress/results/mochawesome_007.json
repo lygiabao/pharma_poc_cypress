@@ -1,0 +1,105 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 1,
+    "pending": 0,
+    "failures": 0,
+    "start": "2023-06-08T15:31:46.189Z",
+    "end": "2023-06-08T15:31:48.573Z",
+    "duration": 2384,
+    "testsRegistered": 1,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "bda64cb3-f032-404f-8654-03a88ef46ea2",
+      "title": "",
+      "fullFile": "cypress/tests/api/CalendarPage_Api.js",
+      "file": "cypress/tests/api/CalendarPage_Api.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "71cdcc68-c02d-48e6-86fc-12575bbbbff6",
+          "title": "Calendar Page: Compare API and UI",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Multiple method ",
+              "fullTitle": "Calendar Page: Compare API and UI Multiple method ",
+              "timedOut": null,
+              "duration": 2378,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "let url = 'https://jsonplaceholder.typicode.com/posts';\n// let url = Cypress.env(\"baseURL\")\nlet postBody = {\n  title: 'foo',\n  body: 'bar',\n  userId: 1\n};\nlet headers = {\n  'Content-type': 'application/json; charset=UTF-8'\n};\ncy.createPost(postBody).then(res => {\n  cy.getPost((Number(res.body.id) - 1).toString()).then(res => {\n    cy.request({\n      method: 'PUT',\n      url: url + \"/\" + res.body.id,\n      body: {\n        id: 1,\n        title: 'fooaaaaaaaaa',\n        body: 'bar',\n        userId: 1\n      },\n      headers: headers\n    }).then(res => {\n      cy.request({\n        method: 'DELETE',\n        url: url + \"/\" + res.body.id\n      });\n    });\n  });\n});",
+              "err": {},
+              "uuid": "a32d5e20-34b0-48dd-bbc2-6d111f4e8140",
+              "parentUUID": "71cdcc68-c02d-48e6-86fc-12575bbbbff6",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "a32d5e20-34b0-48dd-bbc2-6d111f4e8140"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 2378,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

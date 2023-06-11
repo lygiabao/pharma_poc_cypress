@@ -1,0 +1,29 @@
+[
+  {
+    "tableName": "Code"
+  },
+  {
+    "tableName": "Customer name"
+  },
+  {
+    "tableName": "Phone Number"
+  },
+  {
+    "tableName": "Type"
+  },
+  {
+    "tableName": "Segment"
+  },
+  {
+    "tableName": "Area"
+  },
+  {
+    "tableName": "Subarea"
+  },
+  {
+    "tableName": "Customer status"
+  },
+  {
+    "tableName": "Territory"
+  }
+]

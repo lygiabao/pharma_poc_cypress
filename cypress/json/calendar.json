@@ -1,0 +1,18 @@
+[
+  {
+    "pharmacyName": "PHARMART ABC CHEMIST",
+    "pharmacyType": "Scheduled: Remote"
+  },
+  {
+    "pharmacyName": "NORTHPHARM PHARMACY",
+    "pharmacyType": "Scheduled: Remote"
+  },
+  {
+    "pharmacyName": "Middlestar Swiss Hospital",
+    "pharmacyType": "Scheduled: Remote"
+  },
+  {
+    "pharmacyName": "A TO Z PHARMACY",
+    "pharmacyType": "Scheduled: In-store"
+  }
+]
