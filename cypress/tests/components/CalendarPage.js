@@ -55,94 +55,94 @@ describe('Calendar Page', () => {
         calendarWebPage.verifyCalendarPageScreenDisplay();
     }
 
-    // it('Create new Schedule A Call fail', () => {
-    //     calendarWebPage.verifyCalendarPageScreenDisplay();
-    //     calendarWebPage.clickSingleIcon();
-    //     calendarWebPage.verifyCallListLogo();
-    //     calendarWebPage.clickScheduleCallIcon();
-    //     calendarWebPage.verifyScheduleCallLogo();
-    //     calendarWebPage.clickAddButton();
-    //     calendarWebPage.verifyRequireFieldDisplay();
-    //     calendarWebPage.clickCancelCreateCallButton();
-    //     calendarWebPage.verifyCalendarPageScreenDisplay();
-    // })
-    //
-    // it('Create new Schedule A Call with In-store type', () => {
-    //     calendarWebPage.clickPreviousDate()
-    //     createScheduleCall();
-    //     calendarWebPage.inputCustomerNameTextBox();
-    //     calendarWebPage.selectCustomerName();
-    //     calendarWebPage.selectStartTimeDropDown();
-    //     calendarWebPage.selectPurposeDropDown();
-    //     calendarWebPage.clickAddButton();
-    //     calendarWebPage.verifyCreateScheduleCallSuccessToast();
-    //     calendarWebPage.verifyCalendarPageScreenDisplay();
-    // })
-    //
-    // it('Report Schedule a call with In-store type FAIL/ PASS', () => {
-    //     calendarWebPage.clickPreviousDate()
-    //     calendarWebPage.clickInStoreCall();
-    //     calendarWebPage.verifyInfoCallLogo();
-    //     calendarWebPage.clickReportCallButton();
-    //     calendarWebPage.verifyReportCallLogo();
-    //     calendarWebPage.clickUpdateCallButton();
-    //     calendarWebPage.verifyRequireFieldDisplay();
-    //     calendarWebPage.clickCancelCreateCallButton();
-    //     calendarWebPage.verifyCalendarPageScreenDisplay();
-    //     calendarWebPage.clickInStoreCall();
-    //     reportCall();
-    // })
-    //
-    // it('Edit reported call', () => {
-    //     calendarWebPage.clickPreviousDate()
-    //     calendarWebPage.clickReportedInStoreCall();
-    //     calendarWebPage.verifyInfoCallLogo();
-    //     cy.wait(1000);
-    //     calendarWebPage.clickEditButton();
-    //     calendarWebPage.verifyUpdateReportedCallScreenDisplay();
-    //     calendarWebPage.inputQuickNoteTextBox();
-    //     calendarWebPage.clickUpdateCallButton();
-    //     calendarWebPage.verifyUpdateReportedCallSuccessToast();
-    // })
-    //
-    // it('Create new Schedule A Call with Remote type: Phone call', () => {
-    //     createScheduleCall();
-    //     calendarWebPage.inputCustomerNameTextBox();
-    //     calendarWebPage.selectCustomerName();
-    //     calendarWebPage.selectStartTimeDropDown();
-    //     calendarWebPage.clickRemoteType();
-    //     calendarWebPage.selectPhoneCallType();
-    //     calendarWebPage.selectPurposeDropDown();
-    //     calendarWebPage.clickAddButton();
-    //     calendarWebPage.verifyCreateScheduleCallSuccessToast();
-    //     calendarWebPage.verifyCalendarPageScreenDisplay();
-    // })
-    //
-    // it('Create new Schedule A Call with Remote type: Chat Message', () => {
-    //     createScheduleCall();
-    //     calendarWebPage.inputCustomerNameTextBox();
-    //     calendarWebPage.selectCustomerName();
-    //     calendarWebPage.selectStartTimeDropDown();
-    //     calendarWebPage.clickRemoteType();
-    //     calendarWebPage.selectChatMsgType();
-    //     calendarWebPage.selectPurposeDropDown();
-    //     calendarWebPage.clickAddButton();
-    //     calendarWebPage.verifyCreateScheduleCallSuccessToast();
-    //     calendarWebPage.verifyCalendarPageScreenDisplay();
-    // })
-    //
-    // it('Report Schedule a call with Remote type FAIL/ PASS', () => {
-    //     calendarWebPage.clickRemoteCall();
-    //     calendarWebPage.verifyInfoCallLogo();
-    //     calendarWebPage.clickReportCallButton();
-    //     calendarWebPage.verifyReportCallLogo();
-    //     calendarWebPage.clickUpdateCallButton();
-    //     calendarWebPage.verifyRequireFieldDisplay();
-    //     calendarWebPage.clickCancelCreateCallButton();
-    //     calendarWebPage.verifyCalendarPageScreenDisplay();
-    //     calendarWebPage.clickRemoteCall();
-    //     reportCall();
-    // })
+    it('Create new Schedule A Call fail', () => {
+        calendarWebPage.verifyCalendarPageScreenDisplay();
+        calendarWebPage.clickSingleIcon();
+        calendarWebPage.verifyCallListLogo();
+        calendarWebPage.clickScheduleCallIcon();
+        calendarWebPage.verifyScheduleCallLogo();
+        calendarWebPage.clickAddButton();
+        calendarWebPage.verifyRequireFieldDisplay();
+        calendarWebPage.clickCancelCreateCallButton();
+        calendarWebPage.verifyCalendarPageScreenDisplay();
+    })
+
+    it('Create new Schedule A Call with In-store type', () => {
+        calendarWebPage.clickPreviousDate()
+        createScheduleCall();
+        calendarWebPage.inputCustomerNameTextBox();
+        calendarWebPage.selectCustomerName();
+        calendarWebPage.selectStartTimeDropDown();
+        calendarWebPage.selectPurposeDropDown();
+        calendarWebPage.clickAddButton();
+        calendarWebPage.verifyCreateScheduleCallSuccessToast();
+        calendarWebPage.verifyCalendarPageScreenDisplay();
+    })
+
+    it('Report Schedule a call with In-store type FAIL/ PASS', () => {
+        calendarWebPage.clickPreviousDate()
+        calendarWebPage.clickInStoreCall();
+        calendarWebPage.verifyInfoCallLogo();
+        calendarWebPage.clickReportCallButton();
+        calendarWebPage.verifyReportCallLogo();
+        calendarWebPage.clickUpdateCallButton();
+        calendarWebPage.verifyRequireFieldDisplay();
+        calendarWebPage.clickCancelCreateCallButton();
+        calendarWebPage.verifyCalendarPageScreenDisplay();
+        calendarWebPage.clickInStoreCall();
+        reportCall();
+    })
+
+    it('Edit reported call', () => {
+        calendarWebPage.clickPreviousDate()
+        calendarWebPage.clickReportedInStoreCall();
+        calendarWebPage.verifyInfoCallLogo();
+        cy.wait(1000);
+        calendarWebPage.clickEditButton();
+        calendarWebPage.verifyUpdateReportedCallScreenDisplay();
+        calendarWebPage.inputQuickNoteTextBox();
+        calendarWebPage.clickUpdateCallButton();
+        calendarWebPage.verifyUpdateReportedCallSuccessToast();
+    })
+
+    it('Create new Schedule A Call with Remote type: Phone call', () => {
+        createScheduleCall();
+        calendarWebPage.inputCustomerNameTextBox();
+        calendarWebPage.selectCustomerName();
+        calendarWebPage.selectStartTimeDropDown();
+        calendarWebPage.clickRemoteType();
+        calendarWebPage.selectPhoneCallType();
+        calendarWebPage.selectPurposeDropDown();
+        calendarWebPage.clickAddButton();
+        calendarWebPage.verifyCreateScheduleCallSuccessToast();
+        calendarWebPage.verifyCalendarPageScreenDisplay();
+    })
+
+    it('Create new Schedule A Call with Remote type: Chat Message', () => {
+        createScheduleCall();
+        calendarWebPage.inputCustomerNameTextBox();
+        calendarWebPage.selectCustomerName();
+        calendarWebPage.selectStartTimeDropDown();
+        calendarWebPage.clickRemoteType();
+        calendarWebPage.selectChatMsgType();
+        calendarWebPage.selectPurposeDropDown();
+        calendarWebPage.clickAddButton();
+        calendarWebPage.verifyCreateScheduleCallSuccessToast();
+        calendarWebPage.verifyCalendarPageScreenDisplay();
+    })
+
+    it('Report Schedule a call with Remote type FAIL/ PASS', () => {
+        calendarWebPage.clickRemoteCall();
+        calendarWebPage.verifyInfoCallLogo();
+        calendarWebPage.clickReportCallButton();
+        calendarWebPage.verifyReportCallLogo();
+        calendarWebPage.clickUpdateCallButton();
+        calendarWebPage.verifyRequireFieldDisplay();
+        calendarWebPage.clickCancelCreateCallButton();
+        calendarWebPage.verifyCalendarPageScreenDisplay();
+        calendarWebPage.clickRemoteCall();
+        reportCall();
+    })
 
     it('Check user create new Schedule an activity pass', () => {
         calendarWebPage.clickNextDate();
