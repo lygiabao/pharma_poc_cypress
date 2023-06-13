@@ -1,13 +1,11 @@
 export class Common {
 
     static loginPage () {
-        cy.origin('https://dev-poc-identity.azurewebsites.net', () => {
-
+        cy.origin('https://poc-staging-identity.azurewebsites.net', () => {
             const LOGIN_ACCOUNT = {
                 username: "cipla.pocam",
                 password: "Dat@POC@2020"
             }
-
             const {username, password} = LOGIN_ACCOUNT;
             cy.get('#selectCountryCode').select('en');
             cy.get('#username').type(username);
@@ -18,6 +16,15 @@ export class Common {
         Cypress.on('uncaught:exception', (err, runnable) => {
             return false
         });
+    }
+
+    static stringFormat() {
+        String.prototype.format = function () {
+            const args = arguments;
+            return this.replace(/{([0-9]+)}/g, function (match, index) {
+                return typeof args[index] == 'undefined' ? match : args[index];
+            });
+        };
     }
 
 }

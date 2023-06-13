@@ -12,7 +12,7 @@ describe('Territory Page', () => {
     let calendarWebPage = new CalendarWebPage
 
     beforeEach(() => {
-        cy.visit("https://crm-alpha.pharmapoc.com/");
+        cy.visit("https://crm-beta.pharmapoc.com/");
         Common.loginPage()
         homeWebPage.verifyHomePageScreen()
         territoryWebPage.clickTerritoryPage();
@@ -32,17 +32,18 @@ describe('Territory Page', () => {
 
     });
 
-    it('Check On/ Off table options', function () {
+    it('Check On/ Off random of table options', function () {
         territoryWebPage.clickTableOptions()
         territoryWebPage.verifyTableOptionsScreen()
         territoryWebPage.clickCancelButton()
         territoryWebPage.clickTableOptions()
         territoryWebPage.verifyTableOptionsScreen()
-        territoryWebPage.clickOnOffTableOptions()
+        territoryWebPage.clickOnOffRandomTableOptions()
         territoryWebPage.clickOkButton()
+        territoryWebPage.verifyTerritoryPageScreenDisplay();
     });
 
-    it('Filter value by Code', function () {
+    it('Filter value by Code Id', function () {
         territoryWebPage.clickSortCodeIcon()
         territoryWebPage.clickCodeFilterIcon()
         territoryWebPage.inputInvalidSearch()
@@ -51,15 +52,13 @@ describe('Territory Page', () => {
         territoryWebPage.clickCodeFilterIcon()
         territoryWebPage.clickResetButton()
         territoryWebPage.verifyTerritoryPageScreenDisplay();
-
         territoryWebPage.clickCodeFilterIcon()
         territoryWebPage._getRandomCodeId()
         territoryWebPage.inputValidCode()
         territoryWebPage.clickFiltersButton()
-        territoryWebPage.verifyFilterValue()
+        territoryWebPage.verifyFilterValueByCodeId()
     });
 
-    // Chưa xong
     it('Filter value by Customer Name', function () {
         territoryWebPage.clickSortCustomerNameIcon()
         territoryWebPage.clickNameFiltersIcon()
@@ -69,19 +68,23 @@ describe('Territory Page', () => {
         territoryWebPage.clickNameFiltersIcon()
         territoryWebPage.clickResetButton()
         territoryWebPage.verifyTerritoryPageScreenDisplay();
-
         territoryWebPage.clickNameFiltersIcon()
-        territoryWebPage._getRandomNameId()
+        territoryWebPage._getRandomName()
+        territoryWebPage.inputValidName()
+        territoryWebPage.clickFiltersButton()
+        territoryWebPage.verifyFilterValueByName()
     });
 
     it.only('Mass scheduling', function () {
         territoryWebPage.selectCustomer()
         territoryWebPage.clickScheduleCallIcon()
         territoryWebPage.verifyCreateScheduleCallDisplay()
+        territoryWebPage.selectStartDate()
+        territoryWebPage.selectStartTime()
+
         // territoryWebPage.selectCallType()
-        // territoryWebPage.selectStartDate()
-        territoryWebPage.clickCreateScheduleCallButton()
-        territoryWebPage.verifyCreateScheduleCallSuccessToast();
+        // territoryWebPage.clickCreateScheduleCallButton()
+        // territoryWebPage.verifyCreateScheduleCallSuccessToast();
         // territoryWebPage.verifyCreateCallToastDisplay()
     });
 

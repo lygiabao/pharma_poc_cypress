@@ -2,14 +2,16 @@ import {Common} from "../../support/Common";
 import CalendarWebPage from "../../../models/pages/CalendarWebPage";
 import {ScheduleCallAPI} from "../../support/ScheduleCallAPI";
 import HomeWebPage from "../../../models/pages/HomeWebPage";
+import TerritoryWebPage from "../../../models/pages/TerritoryWebPage";
 
 describe('Calendar Page', () => {
 
+    let territoryWebPage = new TerritoryWebPage;
     let calendarWebPage = new CalendarWebPage;
     let homeWebPage = new HomeWebPage;
 
     beforeEach(() => {
-        cy.visit("https://crm-alpha.pharmapoc.com/");
+        cy.visit("https://crm-beta.pharmapoc.com/");
         Common.loginPage()
         homeWebPage.verifyHomePageScreen()
         calendarWebPage.clickCalendarPage()
@@ -55,6 +57,11 @@ describe('Calendar Page', () => {
         calendarWebPage.verifyCalendarPageScreenDisplay();
     }
 
+    function clickTerritoryPage() {
+        territoryWebPage.clickTerritoryPage();
+        territoryWebPage.verifyTerritoryPageScreenDisplay();
+    }
+
     it('Create new Schedule A Call fail', () => {
         calendarWebPage.verifyCalendarPageScreenDisplay();
         calendarWebPage.clickSingleIcon();
@@ -68,15 +75,21 @@ describe('Calendar Page', () => {
     })
 
     it('Create new Schedule A Call with In-store type', () => {
-        calendarWebPage.clickPreviousDate()
-        createScheduleCall();
-        calendarWebPage.inputCustomerNameTextBox();
-        calendarWebPage.selectCustomerName();
-        calendarWebPage.selectStartTimeDropDown();
-        calendarWebPage.selectPurposeDropDown();
-        calendarWebPage.clickAddButton();
-        calendarWebPage.verifyCreateScheduleCallSuccessToast();
-        calendarWebPage.verifyCalendarPageScreenDisplay();
+        clickTerritoryPage();
+        territoryWebPage.getCustomerName().then(name => {
+            calendarWebPage.clickCalendarPage()
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+            calendarWebPage.clickPreviousDate()
+            createScheduleCall();
+            calendarWebPage.inputCustomerNameTextBox(name);
+            calendarWebPage.selectCustomerName();
+            calendarWebPage.selectStartTimeDropDown();
+            calendarWebPage.selectPurposeDropDown();
+            calendarWebPage.selectProduct();
+            calendarWebPage.clickAddButton();
+            calendarWebPage.verifyCreateScheduleCallSuccessToast();
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+        });
     })
 
     it('Report Schedule a call with In-store type FAIL/ PASS', () => {
@@ -93,45 +106,41 @@ describe('Calendar Page', () => {
         reportCall();
     })
 
-    it('Edit reported call', () => {
-        calendarWebPage.clickPreviousDate()
+    it('Edit reported call: In-store', () => {
+        calendarWebPage.clickPreviousDate();
         calendarWebPage.clickReportedInStoreCall();
         calendarWebPage.verifyInfoCallLogo();
         cy.wait(1000);
         calendarWebPage.clickEditButton();
         calendarWebPage.verifyUpdateReportedCallScreenDisplay();
+        calendarWebPage.selectProductOutcome();
         calendarWebPage.inputQuickNoteTextBox();
         calendarWebPage.clickUpdateCallButton();
         calendarWebPage.verifyUpdateReportedCallSuccessToast();
     })
 
     it('Create new Schedule A Call with Remote type: Phone call', () => {
-        createScheduleCall();
-        calendarWebPage.inputCustomerNameTextBox();
-        calendarWebPage.selectCustomerName();
-        calendarWebPage.selectStartTimeDropDown();
-        calendarWebPage.clickRemoteType();
-        calendarWebPage.selectPhoneCallType();
-        calendarWebPage.selectPurposeDropDown();
-        calendarWebPage.clickAddButton();
-        calendarWebPage.verifyCreateScheduleCallSuccessToast();
-        calendarWebPage.verifyCalendarPageScreenDisplay();
-    })
-
-    it('Create new Schedule A Call with Remote type: Chat Message', () => {
-        createScheduleCall();
-        calendarWebPage.inputCustomerNameTextBox();
-        calendarWebPage.selectCustomerName();
-        calendarWebPage.selectStartTimeDropDown();
-        calendarWebPage.clickRemoteType();
-        calendarWebPage.selectChatMsgType();
-        calendarWebPage.selectPurposeDropDown();
-        calendarWebPage.clickAddButton();
-        calendarWebPage.verifyCreateScheduleCallSuccessToast();
-        calendarWebPage.verifyCalendarPageScreenDisplay();
+        clickTerritoryPage();
+        territoryWebPage.getCustomerName().then(name => {
+            calendarWebPage.clickCalendarPage()
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+            calendarWebPage.clickPreviousDate()
+            createScheduleCall();
+            calendarWebPage.inputCustomerNameTextBox(name);
+            calendarWebPage.selectCustomerName();
+            calendarWebPage.selectStartTimeDropDown();
+            calendarWebPage.clickRemoteType();
+            calendarWebPage.selectPhoneCallType();
+            calendarWebPage.selectPurposeDropDown();
+            calendarWebPage.selectProduct();
+            calendarWebPage.clickAddButton();
+            calendarWebPage.verifyCreateScheduleCallSuccessToast();
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+        })
     })
 
     it('Report Schedule a call with Remote type FAIL/ PASS', () => {
+        calendarWebPage.clickPreviousDate();
         calendarWebPage.clickRemoteCall();
         calendarWebPage.verifyInfoCallLogo();
         calendarWebPage.clickReportCallButton();
@@ -144,7 +153,20 @@ describe('Calendar Page', () => {
         reportCall();
     })
 
-    it('Check user create new Schedule an activity pass', () => {
+    it('Edit reported call: Remote', () => {
+        calendarWebPage.clickPreviousDate()
+        calendarWebPage.clickReportedRemoteCall();
+        calendarWebPage.verifyInfoCallLogo();
+        cy.wait(1000);
+        calendarWebPage.clickEditButton();
+        calendarWebPage.verifyUpdateReportedCallScreenDisplay();
+        calendarWebPage.selectProductOutcome();
+        calendarWebPage.inputQuickNoteTextBox();
+        calendarWebPage.clickUpdateCallButton();
+        calendarWebPage.verifyUpdateReportedCallSuccessToast();
+    })
+
+    it('Create new Schedule an activity pass', () => {
         calendarWebPage.clickNextDate();
         calendarWebPage.clickSingleIcon();
         calendarWebPage.verifyCallListLogo();
@@ -182,6 +204,68 @@ describe('Calendar Page', () => {
         calendarWebPage.verifyCalendarPageScreenDisplay();
     })
 
+    it('Create new Schedule A Call with In-store type', () => {
+        clickTerritoryPage();
+        territoryWebPage.getCustomerName().then(name => {
+            calendarWebPage.clickCalendarPage()
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+            // calendarWebPage.clickNextDate();
+            createScheduleCall();
+            calendarWebPage.inputCustomerNameTextBox(name);
+            calendarWebPage.selectCustomerName();
+            calendarWebPage.selectStartTimeDropDown();
+            calendarWebPage.selectPurposeDropDown();
+            calendarWebPage.selectProduct();
+            calendarWebPage.clickAddButton();
+            calendarWebPage.verifyCreateScheduleCallSuccessToast();
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+        })
+    })
+
+    it('Edit schedule: In-store', () => {
+        // calendarWebPage.clickNextDate();
+        calendarWebPage.clickInStoreCall();
+        editCall();
+    })
+
+    it('Delete schedule: In-store', () => {
+        // calendarWebPage.clickNextDate();
+        calendarWebPage.clickInStoreCall();
+        deleteCall();
+    })
+
+    it('Create new Schedule A Call with Remote type: Chat Message', () => {
+        clickTerritoryPage();
+        territoryWebPage.getCustomerName().then(name => {
+            calendarWebPage.clickCalendarPage()
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+            // calendarWebPage.clickNextDate();
+            createScheduleCall();
+            calendarWebPage.inputCustomerNameTextBox(name);
+            calendarWebPage.selectCustomerName();
+            calendarWebPage.selectStartTimeDropDown();
+            calendarWebPage.clickRemoteType();
+            calendarWebPage.selectChatMsgType();
+            calendarWebPage.selectPurposeDropDown();
+            calendarWebPage.selectProduct();
+            calendarWebPage.clickAddButton();
+            calendarWebPage.verifyCreateScheduleCallSuccessToast();
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+        })
+    })
+
+    it('Edit schedule: Remote', () => {
+        // calendarWebPage.clickNextDate();
+        calendarWebPage.clickRemoteCall();
+        editCall();
+    })
+
+    it('Delete schedule: Remote', () => {
+        // calendarWebPage.clickNextDate();
+        calendarWebPage.clickRemoteCall();
+        deleteCall();
+    })
+
     it('Share calendar with valid/ invalid value', () => {
         calendarWebPage.clickShareIcon();
         calendarWebPage.verifyShareScreenDisplay();
@@ -211,58 +295,51 @@ describe('Calendar Page', () => {
         calendarWebPage.verifyMonthListDisplay();
     })
 
-    it('Create new Schedule A Call with In-store type', () => {
-        calendarWebPage.clickNextDate();
-        createScheduleCall();
-        calendarWebPage.inputCustomerNameTextBox();
-        calendarWebPage.selectCustomerName();
-        calendarWebPage.selectStartTimeDropDown();
-        calendarWebPage.selectPurposeDropDown();
-        calendarWebPage.clickAddButton();
-        calendarWebPage.verifyCreateScheduleCallSuccessToast();
+    it('Select another My Calendar', function () {
+        calendarWebPage.clickMyCalenderDropDown();
+        calendarWebPage.verifyDisplayCalendarDropDown();
+        calendarWebPage.selectMyCalendarValue();
         calendarWebPage.verifyCalendarPageScreenDisplay();
-    })
+    });
 
-    it('Edit schedule: In-store', () => {
-        calendarWebPage.clickNextDate();
-        calendarWebPage.clickInStoreCall();
-        editCall();
-    })
+    it('Create new Schedule call with In-store type: Prescribers', function () {
+        clickTerritoryPage();
+        territoryWebPage.clickPrescribersOption();
+        territoryWebPage.getPrescriberName().then(name => {
+            calendarWebPage.clickCalendarPage()
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+            createScheduleCall();
+            calendarWebPage.clickPrescriberCheckBox();
+            calendarWebPage.inputCustomerNameTextBox(name);
+            calendarWebPage.selectCustomerName();
+            calendarWebPage.selectStartTimeDropDown();
+            calendarWebPage.selectPurposeDropDown();
+            calendarWebPage.selectProduct();
+            calendarWebPage.clickAddButton();
+            calendarWebPage.verifyCreateScheduleCallSuccessToast();
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+        });
+    });
 
-    it('Delete schedule: In-store', () => {
-        calendarWebPage.clickNextDate();
-        calendarWebPage.clickInStoreCall();
-        deleteCall();
-    })
-
-    it('Create new Schedule A Call with Remote type: Chat Message', () => {
-        calendarWebPage.clickNextDate();
-        createScheduleCall();
-        calendarWebPage.inputCustomerNameTextBox();
-        calendarWebPage.selectCustomerName();
-        calendarWebPage.selectStartTimeDropDown();
-        calendarWebPage.clickRemoteType();
-        calendarWebPage.selectChatMsgType();
-        calendarWebPage.selectPurposeDropDown();
-        calendarWebPage.clickAddButton();
-        calendarWebPage.verifyCreateScheduleCallSuccessToast();
-        calendarWebPage.verifyCalendarPageScreenDisplay();
-    })
-
-    it('Edit schedule: Remote', () => {
-        calendarWebPage.clickNextDate();
-        calendarWebPage.clickRemoteCall();
-        editCall();
-    })
-
-    it('Delete schedule: Remote', () => {
-        calendarWebPage.clickNextDate();
-        calendarWebPage.clickRemoteCall();
-        deleteCall();
-    })
-
-    it('Create new Schedule call with Prescribers', function () {
-
+    it('Create new Schedule call with Remote type: Prescribers', function () {
+        clickTerritoryPage();
+        territoryWebPage.clickPrescribersOption();
+        territoryWebPage.getPrescriberName().then(name => {
+            calendarWebPage.clickCalendarPage()
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+            createScheduleCall();
+            calendarWebPage.clickPrescriberCheckBox();
+            calendarWebPage.inputCustomerNameTextBox(name);
+            calendarWebPage.selectCustomerName();
+            calendarWebPage.selectStartTimeDropDown();
+            calendarWebPage.clickRemoteType();
+            calendarWebPage.selectPhoneCallType();
+            calendarWebPage.selectPurposeDropDown();
+            calendarWebPage.selectProduct();
+            calendarWebPage.clickAddButton();
+            calendarWebPage.verifyCreateScheduleCallSuccessToast();
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+        })
     });
 
     it('API: Compare schedule call on UI and API', () => {

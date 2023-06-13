@@ -12,8 +12,23 @@ const confirmRemoveKpiCss = '[class*="poc-modal-ok"]'
 const kpiName = '[data-testid="performance-item-label"]'
 const kpiValueCss = '[class*="poc-select-dropdown"] > div'
 const goMyProfileButton = '[data-testid="performance-open-profile"] > svg'
+const goMyProfileButtonTest = '[data-testid="{0}-open-{1}"] > svg'
 
 class HomeWebPage {
+
+    clickMyProfileTest() {
+        String.prototype.format = function () {
+            const args = arguments;
+            return this.replace(/{([0-9]+)}/g, function (match, index) {
+                return typeof args[index] == 'undefined' ? match : args[index];
+            });
+        };
+
+        let a = "TEST1"
+        let b = "TEST2"
+        let goMyProfileButtonTest1 = goMyProfileButtonTest.format(a, b)
+        cy.log(goMyProfileButtonTest1);
+    }
     verifyHomePageScreen() {
         cy.get(homeLogo1Css).should("be.visible")
         cy.get(homeLogo2Css).should("be.visible")

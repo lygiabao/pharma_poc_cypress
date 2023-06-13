@@ -69,13 +69,23 @@ const cancelDeleteButton = '[data-testid="cancelDeleteSchedule"]'
 const confirmDeleteButtonCss = '[data-testid="deleteSchedule"]'
 const deleteCallSuccessToastCss = 'Call deleted'
 const reportInStoreCallIndexCss = 'Reported: In-store'
+const reportRemoteCallIndexCss = 'Reported: Remote'
 const updateReportedCallTitleCss = 'Update a reported call'
 const updateReportedCalSuccessTitleCss = 'Registration successful'
 const previousDateCss = '[data-testid="previousDateButton"]'
 const nextDateCss = '[data-testid="nextDateButton"]'
 const calendarPageCss = 'Calendar'
+const productListCss = '[data-testid="select-option"]'
+const myCalendarDropDownCss = '[aria-label="My calendars"]'
+const myCalendarLogoCss = '[class*="poc-popover-dropdown"]'
+const myCalendarValueCss = '[class*="poc-select-dropdown-item"]'
+const prescribersCheckBox = '[data-testid="prescriberRadio"]'
+const selectOutComeCss = '[data-testid="select-trigger-productOutcomes"] input'
+const outcomeDropDownCss = '[class*="poc-popover-dropdown"]'
 
 class CalendarWebPage {
+
+
 
     clickCalendarPage() {
         cy.contains(calendarPageCss).click()
@@ -125,8 +135,9 @@ class CalendarWebPage {
         cy.get(cancelCreateCallButtonCss).click()
     }
 
-    inputCustomerNameTextBox() {
-        cy.get(customerNameTextBoxCss).type('abc');
+    inputCustomerNameTextBox(name) {
+        cy.log(name)
+        cy.get(customerNameTextBoxCss).type(name);
         cy.get(customerNameListCss).should('be.visible');
     }
 
@@ -270,6 +281,14 @@ class CalendarWebPage {
         })
     }
 
+    selectProduct() {
+        let randomProduct
+        cy.get(productListCss).then(productList => {
+            randomProduct = productList.eq(Math.floor(Math.random()*productList.length))
+            cy.get(randomProduct).click({force: true})
+        })
+    }
+
     clickDateTimePicker() {
         cy.get(dateTimePicker).click()
     }
@@ -370,6 +389,10 @@ class CalendarWebPage {
         cy.contains(reportInStoreCallIndexCss).eq(0).click()
     }
 
+    clickReportedRemoteCall() {
+        cy.contains(reportRemoteCallIndexCss).eq(0).click()
+    }
+
     verifyUpdateReportedCallScreenDisplay() {
         cy.get(reportCallLogoCss).should("be.visible")
         cy.contains(updateReportedCallTitleCss).should('be.visible')
@@ -445,6 +468,46 @@ class CalendarWebPage {
 
         return new Cypress.Promise(resolve => {
             cy.wrap('').then(() => resolve(allMyCalendar));
+        })
+    }
+
+    clickMyCalenderDropDown() {
+        cy.get(myCalendarDropDownCss).click()
+    }
+
+    verifyDisplayCalendarDropDown() {
+        cy.get(myCalendarLogoCss).should("be.visible")
+    }
+
+    selectMyCalendarValue() {
+        let randomMyCalendar
+        cy.get(myCalendarValueCss).then(myCalendar => {
+            randomMyCalendar = myCalendar.eq(Math.floor(Math.random()*myCalendar.length))
+            cy.get(randomMyCalendar).click()
+        })
+    }
+
+    clickPrescriberCheckBox() {
+        cy.get(prescribersCheckBox).click()
+        cy.get('[class="mb-8 mt-12"]').eq(0).then(abc => {
+            expect(abc.text()).equal("Prescriber*");
+        })
+    }
+
+    selectProductOutcome() {
+        cy.get(selectOutComeCss).should(() => {
+        }).then($outComeValue => {
+            if($outComeValue.length) {
+                let randomOutcome
+                cy.get(selectOutComeCss).then(outcome => {
+                    randomOutcome=outcome.eq(Math.floor(Math.random()*outcome.length))
+                    cy.get(randomOutcome).click()
+                })
+                cy.get(outcomeDropDownCss).should("be.visible")
+                cy.contains('Interested').click()
+            } else {
+                cy.log("Do not exist Product")
+            }
         })
     }
 }

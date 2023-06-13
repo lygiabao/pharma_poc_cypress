@@ -5,12 +5,13 @@ describe('Home Page', () => {
     let homeWebPage = new HomeWebPage;
 
     beforeEach(() => {
-        cy.visit("https://crm-alpha.pharmapoc.com/");
+        cy.visit("https://crm-beta.pharmapoc.com/");
         Common.loginPage()
         homeWebPage.verifyHomePageScreen()
     })
 
-    it('Click to view profile', function () {
+    it.only('Click to view profile', function () {
+        homeWebPage.clickMyProfileTest()
         homeWebPage.clickMyProfile()
     });
 
@@ -31,7 +32,7 @@ describe('Home Page', () => {
         homeWebPage.compareKpiValue('Average Sales / Day (MTD)')
     });
 
-    it.only('Fall back KPI value', function () {
+    it('Fall back KPI value', function () {
         cy.wait(1500)
         homeWebPage.removeAllKpi()
 

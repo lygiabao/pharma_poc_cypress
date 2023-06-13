@@ -6,7 +6,7 @@ export class ScheduleCallAPI {
     getScheduleCallApi() {
         cy.wait(100)
         cy.intercept('https://dev-entity.azurewebsites.net/api/v1/Activity/SearchCalendarEvents').as('scheduleCall')
-        calendarWebPage.clickNextDate({force: true});
+        calendarWebPage.clickPreviousDate({force: true});
         calendarWebPage.verifyCalendarPageScreenDisplay();
         cy.wait(100)
         cy.wait('@scheduleCall')
