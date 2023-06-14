@@ -75,7 +75,7 @@ describe('Territory Page', () => {
         territoryWebPage.verifyFilterValueByName()
     });
 
-    it.only('Mass scheduling', function () {
+    it('Mass scheduling', function () {
         territoryWebPage.selectCustomer()
         territoryWebPage.clickScheduleCallIcon()
         territoryWebPage.verifyCreateScheduleCallDisplay()

@@ -10,7 +10,7 @@ describe('Home Page', () => {
         homeWebPage.verifyHomePageScreen()
     })
 
-    it.only('Click to view profile', function () {
+    it('Click to view profile', function () {
         homeWebPage.clickMyProfileTest()
         homeWebPage.clickMyProfile()
     });

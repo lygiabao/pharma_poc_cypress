@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "open": "cypress open",
+    "dev": "cypress run",
     "test": "cypress run --browser chrome --headed",
 
-    "test:mocha-reporter": "yarn test --reporter mochawesome --reporter-options reportDir=\"cypress/results\",overwrite=false,html=false,json=true",
+    "test:mocha-reporter": "yarn dev --reporter mochawesome --reporter-options reportDir=\"cypress/results\",overwrite=false,html=false,json=true",
     "merge-report": "mochawesome-merge \"cypress/results/*.json\" > index.json",
     "build-report": "marge index.json",
     "open-report": "yarn merge-report && yarn build-report && serve mochawesome-report"
