@@ -81,11 +81,37 @@ describe('Territory Page', () => {
         territoryWebPage.verifyCreateScheduleCallDisplay()
         territoryWebPage.selectStartDate()
         territoryWebPage.selectStartTime()
+        territoryWebPage.clickApplyButton()
+        territoryWebPage.clickCreateScheduleCallButton()
+        territoryWebPage.verifyCreateScheduleCallSuccessToast();
+    });
 
-        // territoryWebPage.selectCallType()
-        // territoryWebPage.clickCreateScheduleCallButton()
-        // territoryWebPage.verifyCreateScheduleCallSuccessToast();
-        // territoryWebPage.verifyCreateCallToastDisplay()
+    it('Change mode view and click Customer in list', function () {
+        territoryWebPage.clickTableViewIcon();
+        territoryWebPage.verifyTableViewScreenDisplay();
+        territoryWebPage.clickCustomerList();
+        territoryWebPage.verifyCustomerPageScreenDisplay();
+        territoryWebPage.clickBackButton();
+        // territoryWebPage.verifyTerritoryPageScreenDisplay();
+    });
+
+    it('Select another Sale rep', function () {
+        territoryWebPage.clickAllRepsDropDown();
+        territoryWebPage.verifyAllRepsDisplay();
+        territoryWebPage.clickSaleRepsValue();
+        territoryWebPage.verifyTerritoryPageScreenDisplay();
+    });
+
+    it('Create new Customer', function () {
+        territoryWebPage.clickCreateCustomerIcon();
+        territoryWebPage.verifyCreateCustomerScreen();
+        territoryWebPage.inputCustomerName();
+        territoryWebPage.inputCustomerAddress();
+        territoryWebPage.selectArea();
+        territoryWebPage.selectSubArea();
+        territoryWebPage.inputPhoneNumber();
+        territoryWebPage.selectTerritory();
+        territoryWebPage.clickSubmitCreationRequest();
     });
 
 });

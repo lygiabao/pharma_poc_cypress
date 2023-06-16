@@ -35,12 +35,91 @@ class HomeWebPage {
         cy.contains(homeLogo3Css).should("be.visible")
     }
 
-    getKpiName() {
-        let kpiNameList
-        cy.get(kpiName).then($kpiName => {
-            kpiNameList=$kpiName.text()
+    addFallBackKpi() {
+        let kpi
+        cy.get(kpiName).each($kpiName => {
+            for (let sElement of $kpiName) {
+
+                this.removeEachKpi()
+                this.refreshPage()
+                cy.wait(1000)
+                this.removeEachKpi()
+                this.refreshPage()
+                cy.wait(1000)
+                this.removeEachKpi()
+                this.refreshPage()
+                cy.wait(1000)
+                this.removeEachKpi()
+                this.refreshPage()
+                cy.wait(1000)
+                this.removeEachKpi()
+                this.refreshPage()
+                cy.wait(1000)
+                this.removeEachKpi()
+                this.refreshPage()
+                cy.wait(1000)
+
+                cy.get(sElement).each(abc => {
+                    this.addKpiSection(abc.text())
+                })
+            }
         })
 
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(kpi))
+        })
+    }
+
+    returnKpi() {
+        let allScheduleInfo = [];
+        this.addFallBackKpi().then(cartData =>
+            allScheduleInfo.push(cartData)
+        )
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(allScheduleInfo));
+        })
+    }
+
+    fallBackKpi() {
+        cy.get(kpiName).each($kpiName => {
+            for (let sElement of $kpiName) {
+                cy.get(sElement).each(abc => {
+                    cy.log(abc.text())
+                    this.removeEachKpi()
+                    this.refreshPage()
+                    cy.wait(1000)
+                    this.removeEachKpi()
+                    this.refreshPage()
+                    cy.wait(1000)
+                    this.removeEachKpi()
+                    this.refreshPage()
+                    cy.wait(1000)
+                    this.removeEachKpi()
+                    this.refreshPage()
+                    cy.wait(1000)
+                    this.removeEachKpi()
+                    this.refreshPage()
+                    cy.wait(1000)
+                    this.removeEachKpi()
+                    this.refreshPage()
+                    cy.wait(1000)
+                    this.addKpiSection(abc.text())
+                    cy.wait(1000)
+                })
+            }
+        })
+    }
+
+    getKpiName() {
+        let kpiNameList
+        cy.get(kpiName).each($kpiName => {
+            for (let sElement of $kpiName) {
+                cy.get(sElement).each(abc => {
+                    cy.log(abc.text())
+                })
+            }
+        })
 
         return new Cypress.Promise(resolve => {
             cy.wrap('').then(() => resolve(kpiNameList))
@@ -95,11 +174,14 @@ class HomeWebPage {
         cy.get(deleteKpiButtonCss).should(() => {
         }).then(($removeButton) => {
             if($removeButton.length) {
+                this.refreshPage()
+                cy.wait()
                 cy.get(deleteKpiButtonCss).then($remove => {
-                    cy.get($remove).eq(0).click()
+                    cy.get($remove).eq(0).should('have.class', 'poc-button-icon').click()
                     this.removeKpiScreen()
                 })
             } else {
+
                 cy.log("not exist KPI value")
             }
         })
@@ -114,12 +196,6 @@ class HomeWebPage {
                 cy.wait(1000)
             }
         })
-
-        // cy.get(deleteKpiButtonCss).each($remove => {
-        //     cy.get($remove).should('have.class', 'poc-button-icon').click()
-        //     this.removeKpiScreen()
-        //     cy.wait(1000)
-        // })
     }
 }
 

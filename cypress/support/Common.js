@@ -27,4 +27,24 @@ export class Common {
         };
     }
 
+    static generateRandomUser = usernameLength => {
+        const allChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const allChars_length = allChars.length;
+        let randomUsername = '';
+        for (let i = 0; i < usernameLength; i++) {
+            randomUsername += allChars.charAt(Math.floor(Math.random() * allChars_length))
+        }
+        return randomUsername;
+    }
+
+    static generateRandomPhoneNumber = phoneNumberLength => {
+        const allChars = "0123456789";
+        const allChars_length = allChars.length;
+        let randomPhoneNumber = '';
+        for (let i = 0; i < phoneNumberLength; i++) {
+            randomPhoneNumber += allChars.charAt(Math.floor(Math.random() * allChars_length))
+        }
+        return randomPhoneNumber;
+    }
+
 }

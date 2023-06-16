@@ -32,9 +32,25 @@ describe('Home Page', () => {
         homeWebPage.compareKpiValue('Average Sales / Day (MTD)')
     });
 
-    it('Fall back KPI value', function () {
-        cy.wait(1500)
-        homeWebPage.removeAllKpi()
+    it.only('Fall back KPI value', function () {
+        // homeWebPage.addFallBackKpi()
+
+
+        homeWebPage.removeEachKpi()
+        // homeWebPage.refreshPage()
+        // cy.wait(1000)
+        homeWebPage.removeEachKpi()
+        // homeWebPage.refreshPage()
+        // cy.wait(1000)
+        homeWebPage.removeEachKpi()
+        // homeWebPage.refreshPage()
+        // cy.wait(1000)
+        homeWebPage.removeEachKpi()
+        // homeWebPage.refreshPage()
+        // cy.wait(1000)
+        homeWebPage.removeEachKpi()
+        // homeWebPage.refreshPage()
+        // cy.wait(1000)
 
         // homeWebPage.removeEachKpi()
         // homeWebPage.getKpiName().then($kpiName => {
