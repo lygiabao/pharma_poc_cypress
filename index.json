@@ -1,20 +1,20 @@
 {
   "stats": {
-    "suites": 8,
-    "tests": 32,
-    "passes": 30,
+    "suites": 10,
+    "tests": 34,
+    "passes": 32,
     "pending": 0,
     "failures": 2,
-    "testsRegistered": 32,
-    "passPercent": 93.75,
+    "testsRegistered": 34,
+    "passPercent": 94.11764705882354,
     "pendingPercent": 0,
     "other": 0,
     "hasOther": false,
     "skipped": 0,
     "hasSkipped": false,
     "start": "2023-06-08T04:29:51.757Z",
-    "end": "2023-06-08T15:31:48.573Z",
-    "duration": 39716816
+    "end": "2023-06-19T14:49:04.240Z",
+    "duration": 987552483
   },
   "results": [
     {
@@ -642,6 +642,122 @@
           "pending": [],
           "skipped": [],
           "duration": 2378,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    },
+    {
+      "uuid": "d035074a-27fc-4163-a011-b83200265f74",
+      "title": "",
+      "fullFile": "cypress/tests/api/CalendarPage_Api.js",
+      "file": "cypress/tests/api/CalendarPage_Api.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "c8db12d5-1dca-46d5-8d45-862d1f9d195f",
+          "title": "Calendar Page: Compare API and UI",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Multiple method ",
+              "fullTitle": "Calendar Page: Compare API and UI Multiple method ",
+              "timedOut": null,
+              "duration": 1813,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "let url = 'https://jsonplaceholder.typicode.com/posts';\n// let url = Cypress.env(\"baseURL\")\nlet postBody = {\n  title: 'foo',\n  body: 'bar',\n  userId: 1\n};\nlet headers = {\n  'Content-type': 'application/json; charset=UTF-8'\n};\ncy.createPost(postBody).then(res => {\n  cy.getPost((Number(res.body.id) - 1).toString()).then(res => {\n    cy.request({\n      method: 'PUT',\n      url: url + \"/\" + res.body.id,\n      body: {\n        id: 1,\n        title: 'fooaaaaaaaaa',\n        body: 'bar',\n        userId: 1\n      },\n      headers: headers\n    }).then(res => {\n      cy.request({\n        method: 'DELETE',\n        url: url + \"/\" + res.body.id\n      });\n    });\n  });\n});",
+              "err": {},
+              "uuid": "c94b22d6-0d1d-4636-8d3a-7e2fae24ade3",
+              "parentUUID": "c8db12d5-1dca-46d5-8d45-862d1f9d195f",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "c94b22d6-0d1d-4636-8d3a-7e2fae24ade3"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 1813,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    },
+    {
+      "uuid": "24cd69a6-23b6-4ef9-ae01-506875a4152c",
+      "title": "",
+      "fullFile": "cypress/tests/api/CalendarPage_Api.js",
+      "file": "cypress/tests/api/CalendarPage_Api.js",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "e879e25a-5d9e-4826-a3fa-3ec72406a351",
+          "title": "Calendar Page: Compare API and UI",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Multiple method ",
+              "fullTitle": "Calendar Page: Compare API and UI Multiple method ",
+              "timedOut": null,
+              "duration": 2271,
+              "state": "passed",
+              "speed": "fast",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "let url = 'https://jsonplaceholder.typicode.com/posts';\n// let url = Cypress.env(\"baseURL\")\nlet postBody = {\n  title: 'foo',\n  body: 'bar',\n  userId: 1\n};\nlet headers = {\n  'Content-type': 'application/json; charset=UTF-8'\n};\ncy.createPost(postBody).then(res => {\n  cy.getPost((Number(res.body.id) - 1).toString()).then(res => {\n    cy.request({\n      method: 'PUT',\n      url: url + \"/\" + res.body.id,\n      body: {\n        id: 1,\n        title: 'fooaaaaaaaaa',\n        body: 'bar',\n        userId: 1\n      },\n      headers: headers\n    }).then(res => {\n      cy.request({\n        method: 'DELETE',\n        url: url + \"/\" + res.body.id\n      });\n    });\n  });\n});",
+              "err": {},
+              "uuid": "d9fd4ebd-784a-4f8a-95eb-8104c98709b3",
+              "parentUUID": "e879e25a-5d9e-4826-a3fa-3ec72406a351",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "d9fd4ebd-784a-4f8a-95eb-8104c98709b3"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 2271,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000
