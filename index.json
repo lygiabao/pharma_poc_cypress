@@ -1,82 +1,24 @@
 {
   "stats": {
-    "suites": 2,
-    "tests": 2,
-    "passes": 2,
+    "suites": 1,
+    "tests": 1,
+    "passes": 1,
     "pending": 0,
     "failures": 0,
-    "testsRegistered": 2,
+    "testsRegistered": 1,
     "passPercent": 100,
     "pendingPercent": 0,
     "other": 0,
     "hasOther": false,
     "skipped": 0,
     "hasSkipped": false,
-    "start": "2023-06-19T14:56:05.934Z",
-    "end": "2023-06-19T14:56:22.081Z",
-    "duration": 16147
+    "start": "2023-06-19T15:00:45.253Z",
+    "end": "2023-06-19T15:00:47.133Z",
+    "duration": 1880
   },
   "results": [
     {
-      "uuid": "eaa66409-fb81-4cd5-b27b-d347653961bb",
-      "title": "",
-      "fullFile": "cypress/tests/api/Territory_Api.js",
-      "file": "cypress/tests/api/Territory_Api.js",
-      "beforeHooks": [],
-      "afterHooks": [],
-      "tests": [],
-      "suites": [
-        {
-          "uuid": "8e3cc2f6-0226-4938-9fef-8048f2d7c24f",
-          "title": "Territory Page: Compare API and UI",
-          "fullFile": "",
-          "file": "",
-          "beforeHooks": [],
-          "afterHooks": [],
-          "tests": [
-            {
-              "title": "Get API Table Options",
-              "fullTitle": "Territory Page: Compare API and UI Get API Table Options",
-              "timedOut": null,
-              "duration": 9377,
-              "state": "passed",
-              "speed": "medium",
-              "pass": true,
-              "fail": false,
-              "pending": false,
-              "context": null,
-              "code": "cy.wait(1000);\nlet url = 'https://staging-entity.azurewebsites.net/api/v1/dashboard/tableOptions?type=1';\nlet header = {\n  'sec-ch-ua': '\"Not.A/Brand\";v=\"8\", \"Chromium\";v=\"114\", \"Google Chrome\";v=\"114\"',\n  'Accept': 'application/json',\n  'Referer': 'https://crm-beta.pharmapoc.com/',\n  'sec-ch-ua-mobile': '?0',\n  'Authorization': 'Bearer AhhGbG_e_MQvUxcanZ_JE6mrjggCdfzm_SeGTGHt2BU',\n  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',\n  'sec-ch-ua-platform': '\"macOS\"'\n};\nlet requestBody = {\n  method: 'GET',\n  url: url,\n  headers: header\n};\nlet tableApi;\ncy.request(requestBody).then(req => {\n  tableApi = req.body.data;\n  tableApi = tableApi.map(api => {\n    return {\n      pharmacyId: '' + api.id\n    };\n  });\n  cy.log(JSON.stringify(tableApi));\n  territoryWebPage.clickTableOptions();\n  territoryWebPage.verifyTableOptionsScreen();\n  territoryWebPage.getTableOptionsList().then(tableName => {\n    cy.wrap('').then(() => {\n      cy.log(JSON.stringify(tableName));\n      expect(tableName.length).to.be.deep.eq(tableApi.length);\n      expect(tableName).to.be.deep.eq(tableApi);\n    });\n  });\n});",
-              "err": {},
-              "uuid": "41f05532-17ea-40e4-bfa5-f96cfb337bbc",
-              "parentUUID": "8e3cc2f6-0226-4938-9fef-8048f2d7c24f",
-              "isHook": false,
-              "skipped": false
-            }
-          ],
-          "suites": [],
-          "passes": [
-            "41f05532-17ea-40e4-bfa5-f96cfb337bbc"
-          ],
-          "failures": [],
-          "pending": [],
-          "skipped": [],
-          "duration": 9377,
-          "root": false,
-          "rootEmpty": false,
-          "_timeout": 2000
-        }
-      ],
-      "passes": [],
-      "failures": [],
-      "pending": [],
-      "skipped": [],
-      "duration": 0,
-      "root": true,
-      "rootEmpty": true,
-      "_timeout": 2000
-    },
-    {
-      "uuid": "7f672457-d85e-4cc8-8160-e0d286eedf2f",
+      "uuid": "49e49403-63e9-4811-8ad3-0827ed925bfb",
       "title": "",
       "fullFile": "cypress/tests/api/CalendarPage_Api.js",
       "file": "cypress/tests/api/CalendarPage_Api.js",
@@ -85,7 +27,7 @@
       "tests": [],
       "suites": [
         {
-          "uuid": "c3b0fee9-d588-4ac3-9014-d529571dc8a2",
+          "uuid": "fcf11cc6-0c6b-46b8-ae42-b4dae80a5309",
           "title": "Calendar Page: Compare API and UI",
           "fullFile": "",
           "file": "",
@@ -96,7 +38,7 @@
               "title": "Multiple method ",
               "fullTitle": "Calendar Page: Compare API and UI Multiple method ",
               "timedOut": null,
-              "duration": 2651,
+              "duration": 1872,
               "state": "passed",
               "speed": "fast",
               "pass": true,
@@ -105,20 +47,20 @@
               "context": null,
               "code": "let url = 'https://jsonplaceholder.typicode.com/posts';\n// let url = Cypress.env(\"baseURL\")\nlet postBody = {\n  title: 'foo',\n  body: 'bar',\n  userId: 1\n};\nlet headers = {\n  'Content-type': 'application/json; charset=UTF-8'\n};\ncy.createPost(postBody).then(res => {\n  cy.getPost((Number(res.body.id) - 1).toString()).then(res => {\n    cy.request({\n      method: 'PUT',\n      url: url + \"/\" + res.body.id,\n      body: {\n        id: 1,\n        title: 'fooaaaaaaaaa',\n        body: 'bar',\n        userId: 1\n      },\n      headers: headers\n    }).then(res => {\n      cy.request({\n        method: 'DELETE',\n        url: url + \"/\" + res.body.id\n      });\n    });\n  });\n});",
               "err": {},
-              "uuid": "35e0b1ae-1370-4929-afe2-8b786d7c0f3c",
-              "parentUUID": "c3b0fee9-d588-4ac3-9014-d529571dc8a2",
+              "uuid": "02c2777f-6834-4a06-b400-b056a7593f7d",
+              "parentUUID": "fcf11cc6-0c6b-46b8-ae42-b4dae80a5309",
               "isHook": false,
               "skipped": false
             }
           ],
           "suites": [],
           "passes": [
-            "35e0b1ae-1370-4929-afe2-8b786d7c0f3c"
+            "02c2777f-6834-4a06-b400-b056a7593f7d"
           ],
           "failures": [],
           "pending": [],
           "skipped": [],
-          "duration": 2651,
+          "duration": 1872,
           "root": false,
           "rootEmpty": false,
           "_timeout": 2000
