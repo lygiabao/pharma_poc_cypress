@@ -21,7 +21,6 @@ describe('Territory Page', () => {
 
     it('Check API of table options', function () {
         tableOptionsApi.getTableOptionsApi().then(apiTableOptions => {
-            cy.log(JSON.stringify(apiTableOptions))
             territoryWebPage.getTableOptionsList().then(tableName => {
                 cy.wrap('').then(() => {
                     cy.log(JSON.stringify(tableName))

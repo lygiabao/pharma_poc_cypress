@@ -2,6 +2,7 @@ export class Common {
 
     static loginPage () {
         cy.origin('https://poc-staging-identity.azurewebsites.net', () => {
+        // cy.origin('https://dev-poc-identity.azurewebsites.net', () => {
             const LOGIN_ACCOUNT = {
                 username: "cipla.pocam",
                 password: "Dat@POC@2020"

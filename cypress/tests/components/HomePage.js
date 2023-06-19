@@ -11,12 +11,16 @@ describe('Home Page', () => {
     })
 
     it('Click to view profile', function () {
-        homeWebPage.clickMyProfileTest()
         homeWebPage.clickMyProfile()
     });
 
-    it('Delete & Add KPI with value', function () {
-        cy.wait(1500)
+    it('Fall back KPI', function () {
+        cy.wait(1000)
+        homeWebPage.fallBackKpi()
+    });
+
+    it('Delete & Add KPI with value input', function () {
+        cy.wait(1000)
         homeWebPage.compareKpiValue('MTG Sales')
         homeWebPage.refreshPage()
         cy.wait(1500)
@@ -32,29 +36,8 @@ describe('Home Page', () => {
         homeWebPage.compareKpiValue('Average Sales / Day (MTD)')
     });
 
-    it.only('Fall back KPI value', function () {
-        // homeWebPage.addFallBackKpi()
-
-
-        homeWebPage.removeEachKpi()
-        // homeWebPage.refreshPage()
-        // cy.wait(1000)
-        homeWebPage.removeEachKpi()
-        // homeWebPage.refreshPage()
-        // cy.wait(1000)
-        homeWebPage.removeEachKpi()
-        // homeWebPage.refreshPage()
-        // cy.wait(1000)
-        homeWebPage.removeEachKpi()
-        // homeWebPage.refreshPage()
-        // cy.wait(1000)
-        homeWebPage.removeEachKpi()
-        // homeWebPage.refreshPage()
-        // cy.wait(1000)
-
-        // homeWebPage.removeEachKpi()
-        // homeWebPage.getKpiName().then($kpiName => {
-        //     cy.log($kpiName)
-        // })
+    it('Compare data on CRM and Logi', function () {
+        cy.wait(1000)
+        homeWebPage.logi_Crm()
     });
 });

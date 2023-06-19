@@ -225,7 +225,11 @@ class CalendarWebPage {
     selectGeneralOutcomes() {
         cy.get(generalOutComesDropDownCss).click()
         cy.get(generalOutcomesLogoCss).should("be.visible")
-        cy.get(generalOutComesValueCss).click({multiple: true})
+        let randomOutcome
+        cy.get(generalOutComesValueCss).then(outcome => {
+            randomOutcome = outcome.eq(Math.floor(Math.random()*outcome.length))
+            cy.get(randomOutcome).click()
+        })
     }
 
     verifyReportCallSuccessToast() {

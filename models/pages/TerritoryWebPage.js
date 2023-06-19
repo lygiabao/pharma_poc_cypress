@@ -134,14 +134,14 @@ class TerritoryWebPage {
 
     _getTableOptionName() {
         let tableOptionData = {}
-        cy.get(getTableNameCss).then($title => tableOptionData.pharmacyId = $title.attr("data-testid").replace("table-option-item-", ""))
+        cy.get(getTableNameCss).then($title => tableOptionData.pharmacyId = $title.attr("data-testid")
+            .replace("table-option-item-", ""))
         return new Cypress.Promise(resolve => resolve(tableOptionData))
     }
 
     getTableOptionsList () {
         let tableOptionsList = [];
         cy.get(tableOptionsListCss).each($tableOption => {
-            // this._getTableOptionName().then(tableOptionData => tableOptionsList.push(tableOptionData))
             cy.wrap($tableOption).within(() => {
                 this._getTableOptionName().then(tableOptionData => tableOptionsList.push(tableOptionData))
             })
@@ -166,7 +166,7 @@ class TerritoryWebPage {
         let randomId
         cy.get(getCodeIdCss).then(codeId => {
             randomId = codeId.eq(Math.floor(Math.random()*codeId.length)).text()
-            cy.log(randomId)
+            cy.log("ramdomId: " + randomId)
         })
 
         return new Cypress.Promise(resolve => {
