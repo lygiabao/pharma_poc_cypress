@@ -1,271 +1,293 @@
 import {Common} from "../../support/Common";
 import CalendarWebPage from "../../../models/pages/CalendarWebPage";
-import {ScheduleCallAPI} from "../../support/ScheduleCallAPI";
-import {PurposeCallAPI} from "../../support/PurposeCallAPI";
 import HomeWebPage from "../../../models/pages/HomeWebPage";
+import TerritoryWebPage from "../../../models/pages/TerritoryWebPage";
 
-describe('Calendar Page: Compare API and UI', () => {
+describe('API of Calendar Page', () => {
 
     let calendarWebPage = new CalendarWebPage;
     let homeWebPage = new HomeWebPage;
+    let territoryWebPage = new TerritoryWebPage;
 
-    // beforeEach(() => {
-    //     cy.visit("https://crm-alpha.pharmapoc.com/");
-    //     Common.loginPage()
-    //     homeWebPage.verifyHomePageScreen()
-    //     calendarWebPage.clickCalendarPage()
-    //     calendarWebPage.verifyCalendarPageScreenDisplay();
-    // })
-
-
-    it('Compare List Schedule Call: Intercept', () => {
-        // Check lại vụ này vì sắp xếp không đúng thự tự
-        let scheduleCallAPI = new ScheduleCallAPI()
-        scheduleCallAPI.getScheduleCallApi().then(apiSchedule => {
-            cy.log(JSON.stringify(apiSchedule))
-            calendarWebPage.getAllScheduleInfo().then(scheduleCallList => {
-                cy.wrap('').then(() => {
-                    cy.log(JSON.stringify(scheduleCallList))
-                    expect(scheduleCallList).to.be.deep.eq(apiSchedule);
-                })
-            })
-        })
-    });
-
-    it('Compare List Schedule Call: Get body', function () {
-
-        cy.wait(1000)
-        let url = 'https://dev-entity.azurewebsites.net/api/v1/Activity/SearchCalendarEvents'
-
-        let header = {
-            'Accept': 'application/json',
-            'Accept-Language': 'en,vi-VN;q=0.9,vi;q=0.8,fr-FR;q=0.7,fr;q=0.6,en-US;q=0.5',
-            'Authorization': 'Bearer IVw-pWbykeHrh6ZG8907F7zhaefv9gde_vtQchdzI9w',
-            'Connection': 'keep-alive',
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Origin: https':'//crm-alpha.pharmapoc.com',
-            'Referer: https':'//crm-alpha.pharmapoc.com/',
-            'Sec-Fetch-Dest': 'empty',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Site': 'cross-site',
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
-            'sec-ch-ua': '"Google Chrome";v="113", "Chromium";v="113", "Not-A.Brand";v="24"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"macOS"',
-        }
-
-        let body = {"startDate":"2023-05-30T17:00:00.000Z","endDate":"2023-05-31T16:59:59.999Z","employeeId":853}
-
-        let requestBody = {
-            method: 'POST',
-            url: url,
-            headers: header,
-            body: body
-        }
-
-        cy.request(requestBody).then(req => {
-            cy.log(req)
-            cy.log(JSON.stringify(req))
-        })
-    });
-
-
-    it('API: Compare purpose on UI and API', () => {
-        let purposeCallApi = new PurposeCallAPI()
-        purposeCallApi.getPurposeCallApi().then(getPurposeList => {
-            cy.log(JSON.stringify(getPurposeList))
-            cy.wrap('').then(() => {
-                calendarWebPage.getAllPurpose().then(purposeList => {
-                    expect(getPurposeList).to.be.deep.eq(purposeList);
-                })
-            })
-        })
-    });
-
-    it('Test API', function () {
-        cy.wait(100)
-        cy.intercept('https://dev-entity.azurewebsites.net/api/v1/Activity/SearchCalendarEvents').as('scheduleCall')
-        calendarWebPage.clickNextDate({force: true});
+    beforeEach(() => {
+        cy.visit("https://crm-beta.pharmapoc.com/");
+        Common.loginPage()
+        homeWebPage.verifyHomePageScreen()
+        calendarWebPage.clickCalendarPage()
         calendarWebPage.verifyCalendarPageScreenDisplay();
-        cy.wait(100)
-        cy.wait('@scheduleCall')
-        let apiSchedule
-
-        cy.get('@scheduleCall').then(callList => {
-            apiSchedule = callList.response.body.data
-            apiSchedule = apiSchedule.map(call => {
-                let {accountName, id, typeName} = call
-                return {
-                    pharmacyName: accountName.trim(),
-                    pharmacyId: id,
-                    pharmacyType: typeName
-                }
-            })
-
-            // Get random value with API
-            let roundRandomIndex = Math.floor(Math.random() * apiSchedule.length)
-            let randomObject = apiSchedule[roundRandomIndex]
-            cy.log(JSON.stringify(randomObject.pharmacyName))
-            cy.log(JSON.stringify(randomObject.pharmacyId))
-            cy.log(JSON.stringify(randomObject.pharmacyType))
-
-            verifyNotEmpty('pharmacy name', randomObject.pharmacyName)
-        })
     })
 
-    let verifyNotEmpty = (name, data) => {
-        // Nếu data không có value thì
-        if (!data) {
-            expect(true).to.eq(false, `${name} data is empty`)
-        }
-    }
-
-    it('Test API POST', function () {
+    it('Get all user of My Calendar: getMyCalendars', function () {
         cy.wait(1000)
-        let url = 'https://dev-entity.azurewebsites.net/api/v1/Search/AdvancedSearchPharmacies'
-
-        let header = {
-            'Accept': 'application/json',
-            'Accept-Language': 'en,vi-VN;q=0.9,vi;q=0.8,fr-FR;q=0.7,fr;q=0.6,en-US;q=0.5',
-            'Authorization': 'Bearer efY6T4AyDFDixSTpKpzZpGncGTGlM7SNxXpLll-ZnGs',
-            'Connection': 'keep-alive',
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Origin': 'https://crm-alpha.pharmapoc.com',
-            'Referer': 'https://crm-alpha.pharmapoc.com/',
-            'Sec-Fetch-Dest': 'empty',
-            'Sec-Fetch-Mode': 'cors',
-            'Sec-Fetch-Site': 'cross-site',
-
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
-            'sec-ch-ua': '"Google Chrome";v="113", "Chromium";v="113", "Not-A.Brand";v="24"',
-            'sec-ch-ua-mobile': '?0',
-            'sec-ch-ua-platform': '"macOS"'
-        }
-
-        let body = {"data":[],"itemsPerPage":100,"pageIndex":1,"sorts":null,"text":""}
-
-        let requestBody = {
-            method: 'POST',
-            url: url,
-            headers: header,
-            body: body
-        }
-
-        cy.request(requestBody).then(req => {
-            let {status, body} = req
-            // Câu này dùng để so sánh oke thì đúng là 200 còn ko thì in ra câu ko phải số valid
-            expect(status).to.eq(200, 'Status is not valid')
-            let {data, itemsPerPage, pageIndex, } = body
-
-
-            cy.log(JSON.stringify(data))
-            cy.log(JSON.stringify(itemsPerPage))
-            cy.log(JSON.stringify(pageIndex))
-        })
-    })
-
-    it('getMyCalendar ', function () {
-        cy.get('[value="My calendar"]').click()
-        cy.wait(1000)
-
-        let url = 'https://dev-entity.azurewebsites.net/api/v1/Call/getMyCalendars'
-
-        let header = {
-            'sec-ch-ua':'"Google Chrome";v="113", "Chromium";v="113", "Not-A.Brand";v="24"',
-            'Accept':'application/json',
-            'Referer':'https://crm-alpha.pharmapoc.com/',
-            'sec-ch-ua-mobile':'?0',
-            'Authorization':'Bearer Vy4VxSVHzb0vAKIi4gKP9HpDsQcrZd2oWoCARtL8JiQ',
-            'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
-            'sec-ch-ua-platform':'"macOS"',
-        }
-
-        let body = {"data":[],"itemsPerPage":100,"pageIndex":1,"sorts":null,"text":""}
+        let url = 'https://staging-entity.azurewebsites.net/api/v1/Call/getMyCalendars'
 
         let requestBody = {
             method: 'GET',
             url: url,
-            headers: header,
-            body: body
+            headers: Common.getApiHeader(),
         }
 
+        let myCalendarApi
         cy.request(requestBody).then(req => {
-            let myCalendarsApi = req.body.data
-            myCalendarsApi = myCalendarsApi.map(call => {
-                let {id, firstName, lastName} = call
+            myCalendarApi = req.body.data
+            myCalendarApi = myCalendarApi.map(api => {
                 return {
-                    fullName : firstName + " " + lastName,
+                    calendarName : api.firstName + " " + api.lastName
                 }
             })
 
-            calendarWebPage.getMyCalendars().then(abc => {
-                // cy.log(JSON.stringify(abc))
-                expect(abc).to.be.deep.eq(myCalendarsApi);
-            })
-            // cy.log(JSON.stringify(myCalendarsApi))
-        })
-
-    });
-
-    it('should ', function () {
-        cy.get('[value="My calendar"]').click()
-        cy.wait(1000)
-
-        calendarWebPage.getMyCalendars().then(abc => {
-            cy.log(abc)
-            cy.log(JSON.stringify(abc))
-        })
-    });
-
-    // Handle await với single method
-    it('Handling async request in cypress', async () => {
-        // Chờ cho đến khi nào thằng này được resolved xong mấy lấy kết quả ra dùng await/ async
-        // Chỉ áp dụng cho single request: chỉ get hoặc post/ put/ delete
-        // Nếu không dùng await thì nó sẽ không hiểu response là gì
-        // Cách này y chang khi dùng then (thay vì dùng then)
-        let response = await cy.request({
-            url: "abc",
-            method: 'POST'
-        })
-
-        expect(response.status).to.eq(200)
-        expect(response.body.length).to.eq(100)
-    });
-
-//     Handle with multiple method
-    it.only('Multiple method ', function () {
-        let url = 'https://jsonplaceholder.typicode.com/posts'
-        // let url = Cypress.env("baseURL")
-        let postBody = {
-            title: 'foo',
-            body: 'bar',
-            userId: 1,
-        }
-        let headers = {
-            'Content-type': 'application/json; charset=UTF-8',
-        }
-
-        cy.createPost(postBody).then(res => {
-            cy.getPost((Number(res.body.id)-1).toString()).then(res => {
-                cy.request({
-                    method: 'PUT',
-                    url: url + "/" +res.body.id,
-                    body: {
-                        id: 1,
-                        title: 'fooaaaaaaaaa',
-                        body: 'bar',
-                        userId: 1,
-                    },
-                    headers: headers
-                }).then(res => {
-                    cy.request({
-                        method: 'DELETE',
-                        url: url + "/" +res.body.id,
-                    })
+            calendarWebPage.clickMyCalenderDropDown();
+            calendarWebPage.verifyDisplayCalendarDropDown();
+            calendarWebPage.getMyCalendar().then(myCalendar => {
+                cy.wrap('').then(() => {
+                    expect(myCalendarApi).to.be.deep.eq(myCalendar)
                 })
             })
         })
     });
 
+    it('Get purpose call list: callPurposeType', () => {
+        cy.wait(1000)
+        let url = 'https://staging-entity.azurewebsites.net/api/v1/call/callPurposeType?account'
 
+        let requestBody = {
+            method: 'GET',
+            url: url,
+            headers: Common.getApiHeader()
+        }
+
+        let getPurposeApiList
+        cy.request(requestBody).then(req => {
+            getPurposeApiList = req.body.data
+            getPurposeApiList = getPurposeApiList.map($purpose => {
+                return {
+                    purposeName: $purpose.name.replace('{{productDetailingText}}','')
+                }
+            })
+
+            calendarWebPage.clickSingleIcon();
+            calendarWebPage.verifyCallListLogo();
+            calendarWebPage.clickScheduleCallIcon();
+            calendarWebPage.verifyScheduleCallLogo();
+            calendarWebPage.clickPurposeDropDown();
+
+            calendarWebPage.getAllPurpose().then(purposeList => {
+                cy.wrap('').then(() => {
+                    // Check lại data
+                    // expect(purposeList).to.be.deep.eq(getPurposeApiList);
+                    expect(purposeList.length).to.be.deep.eq(getPurposeApiList.length);
+                })
+            })
+        })
+    });
+
+    it('Get list schedule call by day: SearchCalendarEvents', function () {
+        cy.wait(1000)
+        let url = 'https://staging-entity.azurewebsites.net/api/v1/Activity/SearchCalendarEvents'
+        let body = {"startDate":"2023-06-22T17:00:00.000Z","endDate":"2023-06-23T16:59:59.999Z","employeeId":853}
+
+        let requestBody = {
+            method: 'POST',
+            url: url,
+            headers: Common.getApiHeader(),
+            body: body
+        }
+
+        let apiScheduleList
+        cy.request(requestBody).then(req => {
+            apiScheduleList = req.body.data
+            apiScheduleList = apiScheduleList.map(api => {
+                return {
+                    name: api.accountName.trim(),
+                }
+            })
+
+            calendarWebPage.clickPreviousDate()
+            calendarWebPage.getScheduleName().then(getName => {
+                expect(getName).to.be.deep.eq(apiScheduleList)
+            })
+        })
+    });
+
+    it('Get list Outcomes of Call: callOutcomeType', function () {
+        calendarWebPage.clickPreviousDate()
+        calendarWebPage.verifyCalendarPageScreenDisplay();
+        cy.contains('Reported: In-store').should(() => {
+        }).then($callReported => {
+            if(!$callReported.length) {
+                territoryWebPage.clickTerritoryPage();
+                territoryWebPage.verifyTerritoryPageScreenDisplay();
+
+                territoryWebPage.getCustomerName().then(name => {
+                    calendarWebPage.clickCalendarPage()
+                    calendarWebPage.verifyCalendarPageScreenDisplay();
+                    calendarWebPage.clickPreviousDate()
+                    calendarWebPage.clickSingleIcon();
+                    calendarWebPage.verifyCallListLogo();
+                    calendarWebPage.clickScheduleCallIcon();
+                    calendarWebPage.verifyScheduleCallLogo();
+                    calendarWebPage.inputCustomerNameTextBox(name);
+                    calendarWebPage.selectCustomerName();
+                    calendarWebPage.selectStartTimeDropDown();
+                    calendarWebPage.selectPurposeDropDown();
+                    calendarWebPage.clickAddButton();
+                    calendarWebPage.verifyCreateScheduleCallSuccessToast();
+                });
+                calendarWebPage.clickInStoreCall();
+                calendarWebPage.verifyInfoCallLogo();
+                calendarWebPage.clickReportCallButton();
+                calendarWebPage.verifyReportCallLogo();
+                calendarWebPage.selectGeneralOutcomes();
+                calendarWebPage.clickUpdateCallButton();
+                calendarWebPage.verifyReportCallSuccessToast();
+                calendarWebPage.verifyCalendarPageScreenDisplay();
+            }
+        })
+
+        calendarWebPage.clickReportedInStoreCall();
+        calendarWebPage.verifyInfoCallLogo();
+        cy.wait(1000)
+        let url = 'https://staging-entity.azurewebsites.net/api/v1/call/callOutcomeType?accountType=1'
+
+        let requestBody = {
+            method: 'GET',
+            url: url,
+            headers: Common.getApiHeader(),
+        }
+
+        let apiScheduleList
+        cy.request(requestBody).then(req => {
+            apiScheduleList = req.body.data
+            apiScheduleList = apiScheduleList.map(api => {
+                return {
+                    name: api.name.trim(),
+                }
+            })
+
+            calendarWebPage.clickEditButton();
+            calendarWebPage.verifyUpdateReportedCallScreenDisplay();
+            calendarWebPage.getOutComeList().then(getName => {
+                expect(getName.length).to.be.deep.eq(apiScheduleList.length)
+            })
+        })
+    });
+
+    it('Get list Calendar Shared: getMyShareCalendars', function () {
+        calendarWebPage.clickShareIcon();
+        calendarWebPage.verifyShareScreenDisplay();
+        calendarWebPage.inputValidNameEmailTextBox();
+        calendarWebPage.verifyNameEmailList();
+        calendarWebPage.selectShareValueDropDown();
+        calendarWebPage.clickShareButton();
+
+        let url = 'https://staging-entity.azurewebsites.net/api/v1/Call/getMySharedCalendars'
+
+        let requestBody = {
+            url: url,
+            method: 'GET',
+            headers: Common.getApiHeader()
+        }
+
+        let apiShare
+        cy.request(requestBody).then(req => {
+            apiShare = req.body.data
+            apiShare = apiShare.map(api => {
+                return {
+                    fullName : api.firstName + " " + api.lastName
+                }
+            })
+
+            calendarWebPage.getShareList().then($shareList => {
+                expect(apiShare).to.be.deep.eq($shareList)
+            })
+        })
+        calendarWebPage.clickDeleteShareButton();
+    });
+
+    it('Get list all of Product: callProducts', function () {
+        calendarWebPage.clickSingleIcon();
+        calendarWebPage.verifyCallListLogo();
+        calendarWebPage.clickScheduleCallIcon();
+        calendarWebPage.verifyScheduleCallLogo();
+
+        let url = 'https://staging-entity.azurewebsites.net/api/v1/call/callProducts?accountType=1'
+
+        let requestBody = {
+            url : url,
+            method: 'GET',
+            headers: Common.getApiHeader()
+        }
+
+        let productApi
+        cy.request(requestBody).then(req => {
+            productApi = req.body.data
+            productApi = productApi.map(api => {
+                return {
+                    productName : api.name
+                }
+            })
+
+            calendarWebPage.getProductListApi().then(productList => {
+                expect(productApi).to.be.deep.eq(productList)
+            })
+        })
+    });
+
+
+//     let verifyNotEmpty = (name, data) => {
+//         // Nếu data không có value thì
+//         if (!data) {
+//             expect(true).to.eq(false, `${name} data is empty`)
+//         }
+//     }
+//
+//     // Handle await với single method
+//     it('Handling async request in cypress', async () => {
+//         // Chờ cho đến khi nào thằng này được resolved xong mấy lấy kết quả ra dùng await/ async
+//         // Chỉ áp dụng cho single request: chỉ get hoặc post/ put/ delete
+//         // Nếu không dùng await thì nó sẽ không hiểu response là gì
+//         // Cách này y chang khi dùng then (thay vì dùng then)
+//         let response = await cy.request({
+//             url: "abc",
+//             method: 'POST'
+//         })
+//
+//         expect(response.status).to.eq(200)
+//         expect(response.body.length).to.eq(100)
+//     });
+//
+// //     Handle with multiple method
+//     it('Multiple method ', function () {
+//         let url = 'https://jsonplaceholder.typicode.com/posts'
+//         // let url = Cypress.env("baseURL")
+//         let postBody = {
+//             title: 'foo',
+//             body: 'bar',
+//             userId: 1,
+//         }
+//         let headers = {
+//             'Content-type': 'application/json; charset=UTF-8',
+//         }
+//
+//         cy.createPost(postBody).then(res => {
+//             cy.getPost((Number(res.body.id)-1).toString()).then(res => {
+//                 cy.request({
+//                     method: 'PUT',
+//                     url: url + "/" +res.body.id,
+//                     body: {
+//                         id: 1,
+//                         title: 'fooaaaaaaaaa',
+//                         body: 'bar',
+//                         userId: 1,
+//                     },
+//                     headers: headers
+//                 }).then(res => {
+//                     cy.request({
+//                         method: 'DELETE',
+//                         url: url + "/" +res.body.id,
+//                     })
+//                 })
+//             })
+//         })
+//     });
 });

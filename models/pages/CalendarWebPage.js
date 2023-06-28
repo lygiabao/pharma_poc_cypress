@@ -9,7 +9,7 @@ const addButtonCss = '[data-testid="addCalendar"]'
 const newScheduleLogoCss = '[data-testid="create-event-modal"]'
 const requiredFieldCss = 'Required'
 const cancelCreateCallButtonCss = '[data-testid="cancelCalendar"]'
-const customerNameTextBoxCss = '[class="poc-select-search-input"]'
+const customerNameTextBoxCss = '[data-testid="autocomplete-input"]'
 const customerNameListCss = '[class="poc-select-popover overflow-auto"]'
 const customerNameValueCss = '[class*="poc-select-dropdown-item"] > div'
 const purposeDropDownListCss = '[data-testid="purposeList"]'
@@ -35,7 +35,7 @@ const generalOutComesDropDownCss = '[data-testid="outcomes"]'
 const generalOutcomesLogoCss = '[data-testid="select-popover-outcomes"]'
 const generalOutComesValueCss = '[class*="poc-select-dropdown-item"]'
 const reportCallSuccessToastCss = "Registration successful"
-const shareIconCss = '[data-testid="shareCalendarIcon"]'
+const shareIconCss = '[data-testid="shareCalendarIcon"] span'
 const shareScreenLogoCss = '[role="dialog"]'
 const shareCalendarTitleCss = 'Share my calendar with'
 const nameEmailTextBoxCss = '[data-testid="shareCalendarText"]'
@@ -76,16 +76,15 @@ const previousDateCss = '[data-testid="previousDateButton"]'
 const nextDateCss = '[data-testid="nextDateButton"]'
 const calendarPageCss = 'Calendar'
 const productListCss = '[data-testid="select-option"]'
-const myCalendarDropDownCss = '[aria-label="My calendars"]'
+const myCalendarDropDownCss = '[data-testid="select-trigger-myCalendar"] input'
 const myCalendarLogoCss = '[class*="poc-popover-dropdown"]'
 const myCalendarValueCss = '[class*="poc-select-dropdown-item"]'
 const prescribersCheckBox = '[data-testid="prescriberRadio"]'
 const selectOutComeCss = '[data-testid="select-trigger-productOutcomes"] input'
 const outcomeDropDownCss = '[class*="poc-popover-dropdown"]'
+const multiIconCss = '[data-testid="createMultiCalendarIcon"]'
 
 class CalendarWebPage {
-
-
 
     clickCalendarPage() {
         cy.contains(calendarPageCss).click()
@@ -181,7 +180,7 @@ class CalendarWebPage {
     }
 
     clickRemoteType() {
-        cy.get(remoteTypeDropDownCss, {timeout: 6000}).should("be.visible").click()
+        cy.get(remoteTypeDropDownCss).click()
         cy.get(callListCss).should("be.visible")
     }
 
@@ -248,7 +247,7 @@ class CalendarWebPage {
 
     inputValidNameEmailTextBox() {
         cy.get(nameEmailClearCss).clear({force: true})
-        cy.get(nameEmailTextBoxCss).type("admin")
+        cy.get(nameEmailTextBoxCss).type("ab")
     }
 
 
@@ -264,6 +263,7 @@ class CalendarWebPage {
         cy.get(deleteShareButtonCss).should('be.visible').then(e => {
             Cypress.$(e).click();
         })
+        cy.wait(500)
     }
 
     verifyNameEmailList() {
@@ -286,10 +286,17 @@ class CalendarWebPage {
     }
 
     selectProduct() {
-        let randomProduct
-        cy.get(productListCss).then(productList => {
-            randomProduct = productList.eq(Math.floor(Math.random()*productList.length))
-            cy.get(randomProduct).click({force: true})
+        cy.get(productListCss).should(() => {
+        }).then($productList => {
+            if($productList.length) {
+                let randomProduct
+                cy.get(productListCss).then(productList => {
+                    randomProduct = productList.eq(Math.floor(Math.random()*productList.length))
+                    cy.get(randomProduct).click({force: true})
+                })
+            } else {
+                cy.log("Not have product")
+            }
         })
     }
 
@@ -302,7 +309,11 @@ class CalendarWebPage {
     }
 
     selectAnyDayInList() {
-        cy.get(dayInListCss).eq(0).click()
+        let randomDay
+        cy.get(dayInListCss).then($randomDate => {
+            randomDay=$randomDate.eq(Math.floor(Math.random()*$randomDate.length))
+            cy.get(randomDay).click()
+        })
     }
 
     clickPreviousDay() {
@@ -456,22 +467,18 @@ class CalendarWebPage {
         })
     }
 
-    _getMyCalendars() {
-        let myCalendar = {};
-        cy.get('div').then($fullName => myCalendar.fullName = $fullName.text().trim())
-        return new Cypress.Promise(resolve => resolve(myCalendar))
-    }
-
-    getMyCalendars() {
-        let allMyCalendar = [];
-        cy.get('[class="poc-select-dropdown-item cursor-pointer text-sm hover:bg-[var(--poc-item-selected-bg)]"]').each($myCalendar => {
-            cy.wrap($myCalendar).within(() => {
-                this._getMyCalendars().then(myCalendar => allMyCalendar.push(myCalendar))
+    getScheduleName() {
+        let apiSchedule = []
+        cy.get('[class*="text-base "]').each(scheduleName => {
+            cy.wrap(scheduleName).then($api => {
+                let schedule = {}
+                schedule.name = $api.text()
+                apiSchedule.push(schedule)
             })
         })
 
         return new Cypress.Promise(resolve => {
-            cy.wrap('').then(() => resolve(allMyCalendar));
+            cy.wrap('').then(() => resolve(apiSchedule))
         })
     }
 
@@ -512,6 +519,76 @@ class CalendarWebPage {
             } else {
                 cy.log("Do not exist Product")
             }
+        })
+    }
+
+    clickMultiIcon() {
+        cy.get(multiIconCss).click()
+    }
+
+    _getMyCalendarList() {
+        let myCalendar = {}
+        cy.get('div').then($myCalendar => myCalendar.calendarName = $myCalendar.text())
+        return new Cypress.Promise(resolve => resolve(myCalendar))
+    }
+
+    getMyCalendar() {
+        let myCalendarData = []
+        cy.get('[class="poc-select-dropdown-item cursor-pointer text-sm hover:bg-[var(--poc-item-selected-bg)]"]').each($calendar => {
+            cy.wrap($calendar).within(() => {
+                this._getMyCalendarList().then(myCalendar => myCalendarData.push(myCalendar))
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(myCalendarData))
+        })
+    }
+
+    getOutComeList() {
+        cy.get(generalOutComesDropDownCss).click()
+        cy.get(generalOutcomesLogoCss).should("be.visible")
+        let outcomeList = []
+        cy.get('[class*="inline-flex w-full"]').each($outCome => {
+            cy.wrap($outCome).then(api => {
+                let outComeApi = {}
+                outComeApi.name = api.text().trim()
+                outcomeList.push(outComeApi)
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(outcomeList))
+        })
+    }
+
+    getShareList() {
+        let shareList = []
+        cy.get('[data-testid*="employee"] [class="capitalize"]').each($shareList => {
+            cy.wrap($shareList).then(shareName => {
+                let shareApi = {}
+                shareApi.fullName = shareName.text()
+                shareList.push(shareApi)
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(shareList))
+        })
+    }
+
+    getProductListApi() {
+        let productApi = []
+        cy.get('[class="truncate"]').each(product => {
+            cy.wrap(product).then($productList => {
+                let productList = {}
+                productList.productName = $productList.text().trim()
+                productApi.push(productList)
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(productApi))
         })
     }
 }

@@ -48,4 +48,15 @@ export class Common {
         return randomPhoneNumber;
     }
 
+    static getApiHeader() {
+        return {
+            'sec-ch-ua': '"Not.A/Brand";v="8", "Chromium";v="114", "Google Chrome";v="114"',
+            'Accept': 'application/json',
+            'Referer': 'https://crm-beta.pharmapoc.com/',
+            'sec-ch-ua-mobile': '?0',
+            'Authorization': 'Bearer M1QlzWVWELTvpHQ9JR3DGLEMhY_vFtJ0viy7VEupUJQ',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+            'sec-ch-ua-platform': '"macOS"'
+        }
+    }
 }

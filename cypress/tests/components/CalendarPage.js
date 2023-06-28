@@ -210,7 +210,6 @@ describe('Calendar Page', () => {
         territoryWebPage.getCustomerName().then(name => {
             calendarWebPage.clickCalendarPage()
             calendarWebPage.verifyCalendarPageScreenDisplay();
-            // calendarWebPage.clickNextDate();
             createScheduleCall();
             calendarWebPage.inputCustomerNameTextBox(name);
             calendarWebPage.selectCustomerName();
@@ -224,13 +223,11 @@ describe('Calendar Page', () => {
     })
 
     it('Edit schedule: In-store', () => {
-        // calendarWebPage.clickNextDate();
         calendarWebPage.clickInStoreCall();
         editCall();
     })
 
     it('Delete schedule: In-store', () => {
-        // calendarWebPage.clickNextDate();
         calendarWebPage.clickInStoreCall();
         deleteCall();
     })
@@ -240,7 +237,6 @@ describe('Calendar Page', () => {
         territoryWebPage.getCustomerName().then(name => {
             calendarWebPage.clickCalendarPage()
             calendarWebPage.verifyCalendarPageScreenDisplay();
-            // calendarWebPage.clickNextDate();
             createScheduleCall();
             calendarWebPage.inputCustomerNameTextBox(name);
             calendarWebPage.selectCustomerName();
@@ -256,13 +252,11 @@ describe('Calendar Page', () => {
     })
 
     it('Edit schedule: Remote', () => {
-        // calendarWebPage.clickNextDate();
         calendarWebPage.clickRemoteCall();
         editCall();
     })
 
     it('Delete schedule: Remote', () => {
-        // calendarWebPage.clickNextDate();
         calendarWebPage.clickRemoteCall();
         deleteCall();
     })
@@ -300,6 +294,81 @@ describe('Calendar Page', () => {
         calendarWebPage.clickMyCalenderDropDown();
         calendarWebPage.verifyDisplayCalendarDropDown();
         calendarWebPage.selectMyCalendarValue();
+        calendarWebPage.verifyCalendarPageScreenDisplay();
+    });
+
+    it('Create schedule with My Calendar: Activity type', function () {
+        calendarWebPage.clickMyCalenderDropDown();
+        calendarWebPage.verifyDisplayCalendarDropDown();
+        calendarWebPage.selectMyCalendarValue();
+        calendarWebPage.verifyCalendarPageScreenDisplay();
+        calendarWebPage.clickSingleIcon();
+        calendarWebPage.verifyCallListLogo();
+        calendarWebPage.clickScheduleActivityIcon();
+        calendarWebPage.verifyScheduleActivityLogo();
+        calendarWebPage.selectActivityType();
+        calendarWebPage.clickAddButton();
+        calendarWebPage.verifyCreateScheduleActivitySuccessToast();
+        calendarWebPage.verifyCalendarPageScreenDisplay();
+
+    });
+
+    it('Create new Schedule call with In-store type: any day list', function () {
+        clickTerritoryPage();
+        territoryWebPage.getCustomerName().then(name => {
+            calendarWebPage.clickCalendarPage()
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+            calendarWebPage.clickDateTimePicker();
+            calendarWebPage.verifyDateTimeScreenDisplay();
+            calendarWebPage.selectAnyDayInList();
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+            createScheduleCall();
+            calendarWebPage.inputCustomerNameTextBox(name);
+            calendarWebPage.selectCustomerName();
+            calendarWebPage.selectStartTimeDropDown();
+            calendarWebPage.selectPurposeDropDown();
+            calendarWebPage.selectProduct();
+            calendarWebPage.clickAddButton();
+            calendarWebPage.verifyCreateScheduleCallSuccessToast();
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+        });
+    });
+
+    it.only('Create new Schedule call with Remote type: any day list', function () {
+        clickTerritoryPage();
+        territoryWebPage.getCustomerName().then(name => {
+            calendarWebPage.clickCalendarPage()
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+            calendarWebPage.clickDateTimePicker();
+            calendarWebPage.verifyDateTimeScreenDisplay();
+            calendarWebPage.selectAnyDayInList();
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+            createScheduleCall();
+            calendarWebPage.inputCustomerNameTextBox(name);
+            calendarWebPage.selectCustomerName();
+            calendarWebPage.selectStartTimeDropDown();
+            calendarWebPage.clickRemoteType();
+            calendarWebPage.selectPhoneCallType();
+            calendarWebPage.selectPurposeDropDown();
+            calendarWebPage.selectProduct();
+            calendarWebPage.clickAddButton();
+            calendarWebPage.verifyCreateScheduleCallSuccessToast();
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+        })
+    });
+
+    it('Create new Schedule call with Activity type: any day list', function () {
+        calendarWebPage.clickDateTimePicker();
+        calendarWebPage.verifyDateTimeScreenDisplay();
+        calendarWebPage.selectAnyDayInList();
+        calendarWebPage.verifyCalendarPageScreenDisplay();
+        calendarWebPage.clickSingleIcon();
+        calendarWebPage.verifyCallListLogo();
+        calendarWebPage.clickScheduleActivityIcon();
+        calendarWebPage.verifyScheduleActivityLogo();
+        calendarWebPage.selectActivityType();
+        calendarWebPage.clickAddButton();
+        calendarWebPage.verifyCreateScheduleActivitySuccessToast();
         calendarWebPage.verifyCalendarPageScreenDisplay();
     });
 
@@ -343,18 +412,9 @@ describe('Calendar Page', () => {
         })
     });
 
-    it('API: Compare schedule call on UI and API', () => {
-        // Check lại vụ này vì sắp xếp không đúng thự tự
-        let scheduleCallAPI = new ScheduleCallAPI()
-        scheduleCallAPI.getScheduleCallApi().then(apiSchedule => {
-            cy.log(JSON.stringify(apiSchedule))
-            calendarWebPage.getAllScheduleInfo().then(scheduleCallList => {
-                cy.wrap('').then(() => {
-                    cy.log(JSON.stringify(scheduleCallList))
-                    // expect(scheduleCallList).to.be.deep.eq(apiSchedule);
-                })
-            })
-        })
+    it('Click multi icon', function () {
+        calendarWebPage.clickMultiIcon();
+        territoryWebPage.verifyTerritoryPageScreenDisplay();
     });
 
 });

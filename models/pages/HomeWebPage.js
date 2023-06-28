@@ -1,17 +1,27 @@
 const homeLogo1Css = '[class*="mt-20 w-full"]'
 const homeLogo2Css = '[class*="flex items-center justify-between"]'
-const homeLogo3Css = 'My team\'s performance'
-const itemSelectedCss = '[data-testid="performance-item"]'
+const homeLogo3Css = 'My team\'s performance'|'My performance'
 const addKpiSectionCss = '[data-testid="performance-add"]'
-const deleteKpiIconCss = '[class*="poc-button poc-button"]'
 const deleteKpiButtonCss = '.poc-button-icon'
 const addKpiButtonCss = '[data-testid="select-trigger-performance-add-select"]'
 const kpiListCss = '[class*="poc-select-popover"]'
-const removeKpiLogo = '.poc-modal-footer'
+const removeKpiLogoCss = '.poc-modal-footer'
+const removeKpiTextLogo = 'Are you sure you want to remove this KPI ?'
 const confirmRemoveKpiCss = '[class*="poc-modal-ok"]'
 const kpiName = '[data-testid="performance-item-label"]'
-const kpiValueCss = '[class*="poc-select-dropdown"] > div'
 const goMyProfileButton = '[data-testid="performance-open-profile"] > svg'
+const employeeLogo1Css = '[data-testid="employee-profile-chart"]'
+const employeeLogo2Css = '[data-testid="employee-profile-table"]'
+const employeeLogo3Css = '[data-testid="breadcrumb-text"]'
+const editButtonCss = '[data-testid="employee-open-update-modal"]'
+const verifyEditInfoLogo1Css = '[class="poc-modal-header mb-20 uppercase"]'
+const verifyEditInfoLogo2Css = '[class="poc-modal-footer"]'
+const cancelButtonCss = 'Cancel'
+const updateButtonCss = 'Update'
+const updateSuccessLogo1Css = '[class*="poc-toast-content text-text-primary"]'
+const updateSuccessLogo2Css = 'Successful'
+const emailTextBoxCss = '[data-testid="employee-update-email"]'
+const userProfileCss = '[data-testid="header-customer-trigger"] span'
 const goMyProfileButtonTest = '[data-testid="{0}-open-{1}"] > svg'
 
 class HomeWebPage {
@@ -86,7 +96,8 @@ class HomeWebPage {
     }
 
     confirmRemoveKpi() {
-        cy.get(removeKpiLogo).should("be.visible")
+        cy.get(removeKpiLogoCss).should("be.visible")
+        cy.contains(removeKpiTextLogo).should("be.visible")
         cy.get(confirmRemoveKpiCss).click()
     }
 
@@ -229,6 +240,49 @@ class HomeWebPage {
         cy.get('[id="Card-col2"] span').eq(5).then(logiValue => {
             // cy.log("Avg daily sales: " + logiValue.text())
             expect(logiValue.text()).to.eq(avgSales.replace("KES", "").trim())
+        })
+    }
+
+    verifyEmployeePageScreen() {
+        cy.get(employeeLogo1Css).should("be.visible")
+        cy.get(employeeLogo2Css).should("be.visible")
+        cy.get(employeeLogo3Css).should("be.visible")
+    }
+
+    clickEditProfileButton() {
+        cy.get(editButtonCss).click()
+    }
+
+    verifyEditInfoScreen() {
+        cy.get(verifyEditInfoLogo1Css).should("be.visible")
+        cy.get(verifyEditInfoLogo2Css).should("be.visible")
+    }
+
+    clickCancelButton() {
+        cy.contains(cancelButtonCss).click()
+    }
+
+    clickUpdateButton() {
+        cy.contains(updateButtonCss).click()
+    }
+
+    verifyUpdateSuccessToast() {
+        cy.get(updateSuccessLogo1Css).should("be.visible")
+        cy.contains(updateSuccessLogo2Css).should("be.visible")
+    }
+
+    inputEmailTextBox() {
+        cy.get(emailTextBoxCss).clear().type("pharma@gmail.com")
+    }
+
+    getUserProfile() {
+        let profileName
+        cy.get(userProfileCss).then(name => {
+            profileName = name.text()
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(profileName))
         })
     }
 }

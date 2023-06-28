@@ -11,30 +11,35 @@ const okButtonCss = '[data-testid="submit-button"]'
 const cancelButtonCss = '[data-testid="close-button"]'
 const tableOptionsListCss = '[class*="bg-background-color"]'
 const getTableNameCss = '[data-testid*="table-option"]'
-const onOffTableOptions = '[role="switch"][aria-checked="false"]'
+const onOffTableOptions = '[data-testid*="switch"]'
 const filterCodeIconCss = '[data-testid="filter-code-icon"]'
 const filterNameIconCss = '[data-testid="filter-name-icon"]'
+const filterAreaIconCss = '[data-testid="filter-area-icon"]'
+const filterCallThisMonthIconCss = '[data-testid="filter-call.numberOfCurrentMonthCalls-icon"]'
+const filterLastCallDateIconCss = '[data-testid="filter-call.lastCallDate-icon"]'
 const searchTextBoxCss = '[data-testid="string-filter"]'
 const filtersButtonCss = '[data-testid="filterButton"]'
 const resetButtonCss = '[data-testid="resetButton"]'
 const sortCodeIconCss = '[data-testid="header-column-code"]'
 const sortCustomerNameIconCss = '[data-testid="header-column-name"]'
-const getCodeIdCss = '[class="poc-checkbox"] ~ div > a'
+const getCodeIdCss = '[data-testid*="table-row-code"] a'
 const noDataResultCss = 'No data found.'
-const getNameCss = '[class="p-0"] ~ td a[target="_self"]'
-const selectCustomerCss = '[class="poc-checkbox"]'
-const scheduleCallIconCss = 'Schedule calls'
-const scheduleCallLogo1Css = '[class*="poc-drawer shadow"'
+const getNameCss = '[data-testid*="table-row-name"] a'
+const selectCustomerCss = '[data-testid*="table-checkbox"]'
+const scheduleCallIconCss = '[data-testid="schedule-calls-button"]'
+const scheduleCallLogo1Css = '[data-testid="poc-drawer"]'
 const scheduleCallLogo2Css = '[class*="poc-drawer__header"]'
-const createScheduleCallButton = '[class*="poc-button poc-button-large poc-button-borde"]'
+const createScheduleCallButton = '[data-testid="schedule-calls-submit"] button'
 const createCallSuccessCss = '[class*="poc-toast-content text-text-primary-color"]'
 const callScheduledCss = "Calls scheduled"
-const prescriberOptionCss = 'Prescribers'
-const customerNameLabelCss = '[class="p-0"] ~ td a[target="_self"]'
+const prescriberOptionCss = '[data-testid="prescribers-tag"]'
+const customerNameLabelCss = '[data-testid*="table-row-name"] a'
 const startDateCss = '[data-testid="dateTimePicker"]'
+const startDateEachCallCss = '[data-testid*="date-picker"]'
 const dateLogoCss = '[class="react-calendar poc-calendar"]'
 const dateValueCss = '[class*="react-calendar__tile"]'
 const startTimeCss = '[data-testid="select-trigger-callStartTime"] input'
+const startTimeEachCallCss = '[data-testid*="select-trigger-callStartTime-"] input'
 const startTimeLogoCss = '[class*="poc-popover-dropdown"]'
 const startTimeValueCss = '[class*="poc-select-dropdown-item"]'
 const applyButtonCss = '[data-testid="applyDates"]'
@@ -62,6 +67,23 @@ const phoneNumberTextBoxCss = '[placeholder="Customer phone number"]'
 const territoryDropDownCss = '[name="territory"]'
 const territoryValueCss = 'samwel.gakio@cipla.com (samwel.gakio)'
 const submitButtonCss = '[type="submit"]'
+const allRepsDropDownValueCss = '[class="poc-select-dropdown-item cursor-pointer text-sm hover:bg-[var(--poc-item-selected-bg)]"]'
+const onToggleTableOptionsCss = '[class="poc-switch poc-switch-sm poc-switch-blue"]'
+const areaCheckBoxCss = '[data-testid="select-option"]'
+const areaSelected = '[data-testid*="table-row-area"]'
+const areaHeaderCss = '[data-testid="header-column-area"]'
+const callThisMonthHeaderCss = '[data-testid="header-column-call.numberOfCurrentMonthCalls"]'
+const lastCallDateHeaderCss = '[data-testid="header-column-call.lastCallDate"]'
+const valueTextBoxCss = '[data-testid="filter-number-value"]'
+const selectValueCompareCss = '[data-testid="select-trigger-filter-number-operator"]'
+const selectValueCompareLogoCss = '[data-testid="filter-number-operator-list"]'
+const typeCallDropDownCss = '[data-testid*="select-trigger-type-select"]'
+const typeCallLogoCss = '[data-testid*="type-select-list"]'
+const remoteTypeCss = 'Remote'
+const clearSearchCustomerButtonCss = '[class*="poc-icon poc-icon-1x poc-autocomplete-clear-icon"]'
+const searchCustomerTextBoxCss = '[placeholder="Search customers"]'
+const searchCustomerLogoCss = '[class="poc-select-popover overflow-auto"]'
+const searchCustomerValueCss = '[class="poc-select-popover overflow-auto"] a'
 
 class TerritoryWebPage {
 
@@ -75,7 +97,7 @@ class TerritoryWebPage {
         cy.get(customersLogo3Css).should("be.visible")
         cy.get(pocLoaderCss).should("not.exist")
         cy.contains(customerTitleCss).should("be.visible")
-        cy.wait(1000)
+        cy.wait(500)
     }
 
     clickTableOptions() {
@@ -101,6 +123,27 @@ class TerritoryWebPage {
                 cy.get(onOffTableOptions).then(switchButton => {
                     const randomTableOptions = switchButton.eq(Math.floor(Math.random()*switchButton.length))
                     cy.get(randomTableOptions).click()
+                })
+            }
+        })
+    }
+
+    clickOnByValue(tableOptionValue) {
+        cy.contains(tableOptionValue).parent('[class*="items-center justify-between rounded-sm bg-white"]').then(value => {
+            cy.get(value).siblings('div').then(value => {
+                cy.wrap(value).within(() => {
+                    cy.get('button[data-testid*="switch"]').click()
+                })
+            })
+        })
+    }
+
+    clickOffAllTableOptions() {
+        cy.get(onToggleTableOptionsCss).should(() => {
+        }).then($value => {
+            if($value.length) {
+                cy.get(onToggleTableOptionsCss).each($clickOff => {
+                    cy.get($clickOff).click()
                 })
             }
         })
@@ -132,6 +175,77 @@ class TerritoryWebPage {
         cy.get(filterNameIconCss).click()
     }
 
+    clickAreaFiltersIcon() {
+        cy.get(areaHeaderCss).should(() => {
+        }).then($area => {
+            if(!$area.length) {
+                this.clickTableOptions()
+                this.verifyTableOptionsScreen()
+                this.clickOnByValue("Area")
+                this.clickOkButton()
+                this.verifyTerritoryPageScreenDisplay();
+            }
+            cy.get(filterAreaIconCss).click()
+        })
+    }
+
+    clickTerritoryFiltersIcon() {
+        cy.get('[data-testid="header-column-territories"]').should(() => {
+        }).then($territories => {
+            if(!$territories.length) {
+                this.clickTableOptions()
+                this.verifyTableOptionsScreen()
+                cy.get('[data-testid="table-option-item-53"] button[data-testid*="switch"]').click()
+                // this.clickOnByValue("Territory")
+                this.clickOkButton()
+                this.verifyTerritoryPageScreenDisplay();
+            }
+            cy.get('[data-testid="filter-territories-icon"]').click()
+        })
+    }
+
+    clickTypeFiltersIcon() {
+        cy.get('[data-testid="header-column-segmentTypes"]').should(() => {
+        }).then($type => {
+            if(!$type.length) {
+                this.clickTableOptions()
+                this.verifyTableOptionsScreen()
+                this.clickOnByValue("Type")
+                this.clickOkButton()
+                this.verifyTerritoryPageScreenDisplay();
+            }
+            cy.get('[data-testid="filter-segmentTypes-icon"]').click()
+        })
+    }
+
+    clickCallThisMonthFiltersIcon() {
+        cy.get(callThisMonthHeaderCss).should(() => {
+        }).then($callThisMonth => {
+            if(!$callThisMonth.length) {
+                this.clickTableOptions()
+                this.verifyTableOptionsScreen()
+                this.clickOnByValue("Calls - This month")
+                this.clickOkButton()
+                this.verifyTerritoryPageScreenDisplay();
+            }
+            cy.get(filterCallThisMonthIconCss).click()
+        })
+    }
+
+    clickLastCallDateFiltersIcon() {
+        cy.get(lastCallDateHeaderCss).should(() => {
+        }).then($lastCallDate => {
+            if(!$lastCallDate.length) {
+                this.clickTableOptions()
+                this.verifyTableOptionsScreen()
+                this.clickOnByValue("Last call date")
+                this.clickOkButton()
+                this.verifyTerritoryPageScreenDisplay();
+            }
+            cy.get(filterLastCallDateIconCss).click()
+        })
+    }
+
     _getTableOptionName() {
         let tableOptionData = {}
         cy.get(getTableNameCss).then($title => tableOptionData.pharmacyId = $title.attr("data-testid")
@@ -149,6 +263,25 @@ class TerritoryWebPage {
 
         return new Cypress.Promise(resolve => {
             cy.wrap('').then(() => resolve(tableOptionsList));
+        })
+    }
+
+    _getAllRepsValue() {
+        let allRepsValue = {}
+        cy.get('div').then($title => allRepsValue.repName = $title.text())
+        return new Cypress.Promise(resolve => resolve(allRepsValue))
+    }
+
+    getAllReps() {
+        let allRepList = [];
+        cy.get(allRepsDropDownValueCss).each($allReps => {
+            cy.wrap($allReps).within(() => {
+                this._getAllRepsValue().then(saleRepData => allRepList.push(saleRepData))
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(allRepList));
         })
     }
 
@@ -214,7 +347,7 @@ class TerritoryWebPage {
     }
 
     clickScheduleCallIcon() {
-        cy.contains(scheduleCallIconCss).click()
+        cy.get(scheduleCallIconCss).click()
     }
 
     verifyCreateScheduleCallDisplay() {
@@ -232,7 +365,7 @@ class TerritoryWebPage {
     }
 
     clickPrescribersOption() {
-        cy.contains(prescriberOptionCss).click()
+        cy.get(prescriberOptionCss).click()
         this.verifyTerritoryPageScreenDisplay()
     }
 
@@ -285,8 +418,25 @@ class TerritoryWebPage {
         })
     }
 
+    inputValidSearchCustomer() {
+        this._getRandomName().then(name => {
+            cy.get(searchCustomerTextBoxCss).type(name)
+        })
+        cy.get(searchCustomerLogoCss).should("be.visible")
+    }
+
     selectStartDate() {
-        cy.get(startDateCss).eq(0).click()
+        cy.get(startDateCss).click()
+        cy.get(dateLogoCss).should("be.visible")
+        let randomDate
+        cy.get(dateValueCss).then($date => {
+            randomDate=$date.eq(Math.floor(Math.random()*$date.length))
+            cy.get(randomDate).click()
+        })
+    }
+
+    selectStartDateForEachCall() {
+        cy.get(startDateEachCallCss).click()
         cy.get(dateLogoCss).should("be.visible")
         let randomDate
         cy.get(dateValueCss).then($date => {
@@ -296,7 +446,17 @@ class TerritoryWebPage {
     }
 
     selectStartTime() {
-        cy.get(startTimeCss).eq(0).click()
+        cy.get(startTimeCss).click()
+        cy.get(startTimeLogoCss).should("be.visible")
+        let randomTime
+        cy.get(startTimeValueCss).then($time => {
+            randomTime=$time.eq(Math.floor(Math.random()*$time.length))
+            cy.get(randomTime).click()
+        })
+    }
+
+    selectStartTimeForEachCall() {
+        cy.get(startTimeEachCallCss).click()
         cy.get(startTimeLogoCss).should("be.visible")
         let randomTime
         cy.get(startTimeValueCss).then($time => {
@@ -401,8 +561,124 @@ class TerritoryWebPage {
         cy.get(submitButtonCss).click()
     }
 
-    verifyCreateCustomerSuccess() {
+    selectAreaValue() {
+        let randomAreaCheckbox
+        let areaText
+        cy.get(areaCheckBoxCss).then($area => {
+            randomAreaCheckbox = $area.eq(Math.floor(Math.random()*$area.length))
+            cy.get(randomAreaCheckbox).click()
+            cy.get(randomAreaCheckbox).siblings('span').then(a => {
+                areaText = a.text()
+            })
+        })
 
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(areaText));
+        })
+    }
+
+    verifyAreaSelected() {
+        let area
+        cy.get(areaSelected).eq(0).then($area => {
+            area = $area.text()
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(area));
+        })
+    }
+
+    inputValueCallTextBox() {
+        cy.get(valueTextBoxCss).type("10")
+    }
+
+    selectValueCompare() {
+        cy.get(selectValueCompareCss).click()
+        cy.get(selectValueCompareLogoCss).should("be.visible")
+        cy.get('[data-testid="filter-number-operator-list"] > div').eq(1).click()
+    }
+
+    selectTypeCall() {
+        cy.get(typeCallDropDownCss).click()
+        cy.get(typeCallLogoCss).should("be.visible")
+        cy.contains(remoteTypeCss).click()
+    }
+
+    inputInvalidSearchCustomer() {
+        cy.get(searchCustomerTextBoxCss).type("abc123!@#")
+    }
+
+    clickClearSearchCustomer() {
+        cy.get(clearSearchCustomerButtonCss).click()
+    }
+
+    selectSearchCustomer() {
+        cy.get(searchCustomerValueCss).eq(0).click()
+    }
+
+    clickFilterTypeIcon() {
+        cy.get('[data-testid="filter-segmentTypes-icon"]').click()
+        cy.get('[data-testid="filter-segmentTypes-content"]').should("be.visible")
+    }
+
+    getSegmentTypes() {
+        let segmentType = []
+        cy.get('span[class="truncate"]').each($segmentTypes => {
+            cy.wrap($segmentTypes).then($segment => {
+                let types = {}
+                types.segmentType = $segment.text()
+                segmentType.push(types)
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(segmentType));
+        })
+    }
+
+    geAreaList() {
+        let area = []
+        cy.get('[data-testid="filter-area-content"] [class="truncate"]').each($area => {
+            cy.wrap($area).then($areaList => {
+                let types = {}
+                types.area = $areaList.text()
+                area.push(types)
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(area));
+        })
+    }
+
+    getTerritoryList() {
+        let territory = []
+        cy.get('[data-testid="filter-territories-content"] [class="truncate"]').each($territory => {
+            cy.wrap($territory).then($territoryList => {
+                let types = {}
+                types.territory = $territoryList.text()
+                territory.push(types)
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(territory));
+        })
+    }
+
+    getApiCustomerName() {
+        let customerApi = []
+        cy.get(customerNameLabelCss).each($customer => {
+            cy.wrap($customer).then($customerValue => {
+                let customerArray = {}
+                customerArray.nameCustomer = $customerValue.text()
+                customerApi.push(customerArray)
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(customerApi));
+        })
     }
 }
 
