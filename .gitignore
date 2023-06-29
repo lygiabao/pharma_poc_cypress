@@ -8,7 +8,7 @@ cypress/videos/
 cypress/reports/
 cypress/fixtures
 cypress/reports/html
-
+allure-results
 \index.json
 .index.json
 index.json/
