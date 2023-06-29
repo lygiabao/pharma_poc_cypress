@@ -6,6 +6,8 @@ cypress/results/
 cypress/screenshots/
 cypress/videos/
 cypress/reports/
+cypress/fixtures
+cypress/reports/html
 \index.json
 .index.json
 index.json/
