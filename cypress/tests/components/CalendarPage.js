@@ -1,6 +1,5 @@
 import {Common} from "../../support/Common";
 import CalendarWebPage from "../../../models/pages/CalendarWebPage";
-import {ScheduleCallAPI} from "../../support/ScheduleCallAPI";
 import HomeWebPage from "../../../models/pages/HomeWebPage";
 import TerritoryWebPage from "../../../models/pages/TerritoryWebPage";
 
@@ -31,6 +30,7 @@ describe('Calendar Page', () => {
         calendarWebPage.clickReportCallButton();
         calendarWebPage.verifyReportCallLogo();
         calendarWebPage.selectGeneralOutcomes();
+        calendarWebPage.checkSelectPurpose();
         calendarWebPage.clickUpdateCallButton();
         calendarWebPage.verifyReportCallSuccessToast();
         calendarWebPage.verifyCalendarPageScreenDisplay();

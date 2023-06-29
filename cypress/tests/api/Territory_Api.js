@@ -132,7 +132,7 @@ describe('API of Territory Page', () => {
         })
     });
 
-    it.only('Get value on Table Options for Territory: optionsListValue', function () {
+    it('Get value on Table Options for Territory: optionsListValue', function () {
         cy.wait(1000)
         let url = 'https://staging-entity.azurewebsites.net/api/v1/dashboard/optionListValues?type=1'
 
@@ -160,7 +160,7 @@ describe('API of Territory Page', () => {
         })
     });
 
-    it('Check count and name of Customer: AdvancedSearchPharmacies', function () {
+    it.only('Check count and name of Customer: AdvancedSearchPharmacies', function () {
         cy.wait(1000)
         let url = 'https://staging-entity.azurewebsites.net/api/v1/Search/AdvancedSearchPharmacies'
         let body = {"data":[],"itemsPerPage":100,"pageIndex":1,"sorts":null,"text":""}
@@ -174,6 +174,7 @@ describe('API of Territory Page', () => {
 
         let customerName
         cy.request(requestBody).then(req => {
+            cy.log(JSON.stringify(req.body.data))
             customerName = req.body.data.results
             customerName = customerName.map(api => {
                 return {
@@ -186,8 +187,12 @@ describe('API of Territory Page', () => {
                 })
             })
 
-            cy.get('[data-testid="total-data-amount"]').then($customerAmount => {
-                expect($customerAmount.text()).eq("" + req.body.data.totalItemsWithoutFilter)
+            cy.get('[data-testid="total-data-amount"]').then($totalWithoutFilter => {
+                expect($totalWithoutFilter.text()).eq("" + req.body.data.totalItemsWithoutFilter)
+            })
+
+            cy.get('[data-testid="total-data-amount"]').then($totalItems => {
+                expect($totalItems.text()).eq("" + req.body.data.totalItemsWithoutFilter)
             })
         })
     });

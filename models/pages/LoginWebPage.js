@@ -8,6 +8,8 @@ const passwordTextBoxCss = '[id="password"]'
 const newPasswordTextBoxCss = '[id="newPassword"]'
 const confirmPasswordTextBoxCss = '[id="confirmPassword"]'
 const changePwdButtonCss = '[type="submit"]'
+const pwdNotMatchLogoCss = '[data-notify="container"]'
+const pwdNotMatchTittleCss = 'Password not match'
 
 class LoginWebPage {
 
@@ -33,15 +35,15 @@ class LoginWebPage {
     }
 
     inputCurrentPwdTextBox() {
-        cy.get(passwordTextBoxCss).type("Dat@POC@2020")
+        cy.get(passwordTextBoxCss).type("Dat@POC@2021")
     }
 
     inputNewPwdTextBox() {
-        cy.get(newPasswordTextBoxCss).type("ABC123")
+        cy.get(newPasswordTextBoxCss).type("Lyhoangvu0101@")
     }
 
     inputConfirmPwdTextBox() {
-        cy.get(confirmPasswordTextBoxCss).type("ABC456")
+        cy.get(confirmPasswordTextBoxCss).type("Lyhoangvu0101@")
     }
 
     clickChangePwdButton() {
@@ -49,7 +51,8 @@ class LoginWebPage {
     }
 
     verifyPwdNotMatchToast() {
-
+        cy.get(pwdNotMatchLogoCss).should("be.visible")
+        cy.contains(pwdNotMatchTittleCss).should("be.visible")
     }
 }
 

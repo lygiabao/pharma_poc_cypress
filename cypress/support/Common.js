@@ -54,7 +54,7 @@ export class Common {
             'Accept': 'application/json',
             'Referer': 'https://crm-beta.pharmapoc.com/',
             'sec-ch-ua-mobile': '?0',
-            'Authorization': 'Bearer M1QlzWVWELTvpHQ9JR3DGLEMhY_vFtJ0viy7VEupUJQ',
+            'Authorization': 'Bearer 0IrAvsOIzU8L41BP75e-5CVai_sijXspUfKlG4onTNY',
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
             'sec-ch-ua-platform': '"macOS"'
         }

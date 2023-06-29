@@ -20,12 +20,6 @@ export class PurposeCallAPI {
                     purposeName: call.name.replace('{{productDetailingText}}','')
                 }
             })
-            //
-            // calendarWebPage.getAllPurpose().then(purposeList => {
-            //     cy.log("def: " + JSON.stringify(purposeList))
-            //     cy.log("abc: " + JSON.stringify(getPurposeList))
-            //     expect(getPurposeList).to.be.deep.eq(purposeList);
-            // })
         })
 
         return new Cypress.Promise(resolve => {

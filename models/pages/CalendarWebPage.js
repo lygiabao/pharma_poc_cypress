@@ -591,6 +591,15 @@ class CalendarWebPage {
             cy.wrap('').then(() => resolve(productApi))
         })
     }
+
+    checkSelectPurpose() {
+        cy.get('[class="poc-multiselect-value cursor-auto"]').should(() => {
+        }).then($purpose => {
+            if(!$purpose.length) {
+                this.selectPurposeDropDown()
+            }
+        })
+    }
 }
 
 module.exports = CalendarWebPage

@@ -285,6 +285,37 @@ class HomeWebPage {
             cy.wrap('').then(() => resolve(profileName))
         })
     }
+
+    clickAddKpiSection() {
+        cy.get(addKpiButtonCss).should(() => {
+        }).then($kpi => {
+            if(!$kpi.length) {
+                cy.get(deleteKpiButtonCss).eq(0).click()
+                this.confirmRemoveKpi()
+            }
+        })
+
+        cy.get(addKpiButtonCss).eq(0).click()
+    }
+
+    verifyKpiListScreen() {
+        cy.get(kpiListCss).should("be.visible")
+    }
+
+    getKpiList() {
+        let allKpi = []
+        cy.get('[class*="inline-flex w-full items-center"]').each(kpiList => {
+            let kpi = {}
+            cy.wrap(kpiList).then(api => {
+                kpi.kpiName = api.text()
+                allKpi.push(kpi)
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(allKpi))
+        })
+    }
 }
 
 module.exports = HomeWebPage

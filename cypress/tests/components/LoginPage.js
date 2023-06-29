@@ -72,7 +72,7 @@ describe('Login Page', () => {
         })
     });
 
-    it.only('Change password', function () {
+    it('Change password', function () {
         Common.loginPage();
         homeWebPage.verifyHomePageScreen();
         loginWebPage.clickProfileIcon();

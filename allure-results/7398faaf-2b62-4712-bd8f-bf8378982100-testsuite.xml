@@ -1,0 +1,15 @@
+<?xml version='1.0'?>
+<ns2:test-suite xmlns:ns2='urn:model.allure.qatools.yandex.ru' start='1687929075604' stop='1687929083676'>
+    <name>API of Home Page</name>
+    <title>API of Home Page</title>
+    <test-cases>
+        <test-case start='1687929075604' status='passed' stop='1687929083675'>
+            <name>Get user profile: getMemberProfile</name>
+            <title>Get user profile: getMemberProfile</title>
+            <labels/>
+            <parameters/>
+            <steps/>
+            <attachments/>
+        </test-case>
+    </test-cases>
+</ns2:test-suite>
