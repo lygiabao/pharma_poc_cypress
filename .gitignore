@@ -3,6 +3,7 @@ node_modules/
 cypress/results/
 cypress/screenshots/
 cypress/videos/
+cypress/reports/
 \index.json
 .index.json
 index.json/
