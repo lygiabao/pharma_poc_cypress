@@ -245,9 +245,9 @@ class CalendarWebPage {
         cy.contains(shareCalendarTitleCss).should("be.visible")
     }
 
-    inputValidNameEmailTextBox() {
+    inputValidNameEmailTextBox(email) {
         cy.get(nameEmailClearCss).clear({force: true})
-        cy.get(nameEmailTextBoxCss).type("ab")
+        cy.get(nameEmailTextBoxCss).type(email)
     }
 
 
@@ -597,6 +597,66 @@ class CalendarWebPage {
         }).then($purpose => {
             if(!$purpose.length) {
                 this.selectPurposeDropDown()
+            }
+        })
+    }
+
+    getActivityType() {
+        let activityList = []
+        cy.get('[data-testid="activityTypeListItem"] div[class*="inline-flex"]').each($activity => {
+            let activity = {}
+            cy.wrap($activity).then($activity => {
+                activity.activityType = $activity.text().trim().replaceAll("-","").replace("  ", "").replace(" ","")
+                activityList.push(activity)
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(activityList))
+        })
+    }
+
+    clickActivityDropDown() {
+        cy.get(activityTypeDropDownCss).click()
+        cy.get(activityTypeLogoCss).should("be.visible")
+    }
+
+    getCallMethod() {
+        let call = []
+        cy.get('[name="methodId"] ~ span').each($callMethod => {
+            let callMethod = {}
+            cy.wrap($callMethod).then(api => {
+                callMethod.callname = api.text()
+                call.push(callMethod)
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(call))
+        })
+    }
+
+    getEmployeeShare() {
+        let employee = []
+        cy.get('[data-testid="select-popover-shareCalendarText"] [class="text-sm"]').each($employee => {
+            let employeeShare = {}
+            cy.wrap($employee).then(api => {
+                employeeShare.employeeName = api.text()
+                employee.push(employeeShare)
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(employee))
+        })
+    }
+
+    checkDeleteEmployee() {
+        cy.wait(1000)
+        cy.get(deleteShareButtonCss).should(() => {
+        }).then($deleteButton => {
+            if($deleteButton.length) {
+                cy.get(deleteShareButtonCss).click({multiple:true})
             }
         })
     }

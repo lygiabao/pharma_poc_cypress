@@ -17,221 +17,310 @@ describe('API of Calendar Page', () => {
         calendarWebPage.verifyCalendarPageScreenDisplay();
     })
 
-    it('Get all user of My Calendar: getMyCalendars', function () {
-        cy.wait(1000)
-        let url = 'https://staging-entity.azurewebsites.net/api/v1/Call/getMyCalendars'
+    for (let i = 0; i < 3; i++) {
+        it('Get all user of My Calendar: getMyCalendars', function () {
+            let url = 'https://staging-entity.azurewebsites.net/api/v1/Call/getMyCalendars'
 
-        let requestBody = {
-            method: 'GET',
-            url: url,
-            headers: Common.getApiHeader(),
-        }
+            let requestBody = {
+                method: 'GET',
+                url: url,
+                headers: Common.getApiHeader(),
+            }
 
-        let myCalendarApi
-        cy.request(requestBody).then(req => {
-            myCalendarApi = req.body.data
-            myCalendarApi = myCalendarApi.map(api => {
-                return {
-                    calendarName : api.firstName + " " + api.lastName
-                }
-            })
+            let myCalendarApi
+            cy.request(requestBody).then(req => {
+                myCalendarApi = req.body.data
+                myCalendarApi = myCalendarApi.map(api => {
+                    return {
+                        calendarName: api.firstName + " " + api.lastName
+                    }
+                })
 
-            calendarWebPage.clickMyCalenderDropDown();
-            calendarWebPage.verifyDisplayCalendarDropDown();
-            calendarWebPage.getMyCalendar().then(myCalendar => {
-                cy.wrap('').then(() => {
-                    expect(myCalendarApi).to.be.deep.eq(myCalendar)
+                cy.log(JSON.stringify(myCalendarApi))
+                calendarWebPage.clickMyCalenderDropDown();
+                calendarWebPage.verifyDisplayCalendarDropDown();
+                calendarWebPage.getMyCalendar().then(myCalendar => {
+                    cy.wrap('').then(() => {
+                        cy.log(JSON.stringify(myCalendarApi))
+                        expect(myCalendarApi).to.be.deep.eq(myCalendar)
+                    })
                 })
             })
-        })
-    });
+        });
 
-    it('Get purpose call list: callPurposeType', () => {
-        cy.wait(1000)
-        let url = 'https://staging-entity.azurewebsites.net/api/v1/call/callPurposeType?account'
+        it('Get purpose call list: callPurposeType', () => {
+            let url = 'https://staging-entity.azurewebsites.net/api/v1/call/callPurposeType?account'
 
-        let requestBody = {
-            method: 'GET',
-            url: url,
-            headers: Common.getApiHeader()
-        }
+            let requestBody = {
+                method: 'GET',
+                url: url,
+                headers: Common.getApiHeader()
+            }
 
-        let getPurposeApiList
-        cy.request(requestBody).then(req => {
-            getPurposeApiList = req.body.data
-            getPurposeApiList = getPurposeApiList.map($purpose => {
-                return {
-                    purposeName: $purpose.name.replace('{{productDetailingText}}','')
+            let getPurposeApiList
+            cy.request(requestBody).then(req => {
+                getPurposeApiList = req.body.data
+                getPurposeApiList = getPurposeApiList.map($purpose => {
+                    return {
+                        purposeName: $purpose.name.replace('{{productDetailingText}}', '')
+                    }
+                })
+
+                calendarWebPage.clickSingleIcon();
+                calendarWebPage.verifyCallListLogo();
+                calendarWebPage.clickScheduleCallIcon();
+                calendarWebPage.verifyScheduleCallLogo();
+                calendarWebPage.clickPurposeDropDown();
+
+                calendarWebPage.getAllPurpose().then(purposeList => {
+                    cy.wrap('').then(() => {
+                        // Check lại data
+                        // expect(purposeList).to.be.deep.eq(getPurposeApiList);
+                        expect(purposeList.length).to.be.deep.eq(getPurposeApiList.length);
+                    })
+                })
+            })
+        });
+
+        it('Get list schedule call by day: SearchCalendarEvents', function () {
+            let url = 'https://staging-entity.azurewebsites.net/api/v1/Activity/SearchCalendarEvents'
+            let body = {"startDate": "2023-06-22T17:00:00.000Z", "endDate": "2023-06-23T16:59:59.999Z", "employeeId": 853}
+
+            let requestBody = {
+                method: 'POST',
+                url: url,
+                headers: Common.getApiHeader(),
+                body: body
+            }
+
+            let apiScheduleList
+            cy.request(requestBody).then(req => {
+                apiScheduleList = req.body.data
+                apiScheduleList = apiScheduleList.map(api => {
+                    return {
+                        name: api.accountName.trim(),
+                    }
+                })
+
+                calendarWebPage.clickPreviousDate()
+                calendarWebPage.getScheduleName().then(getName => {
+                    expect(getName).to.be.deep.eq(apiScheduleList)
+                })
+            })
+        });
+
+        it('Get list Outcomes of Call: callOutcomeType', function () {
+            calendarWebPage.clickPreviousDate()
+            calendarWebPage.verifyCalendarPageScreenDisplay();
+            cy.contains('Reported: In-store').should(() => {
+            }).then($callReported => {
+                if (!$callReported.length) {
+                    territoryWebPage.clickTerritoryPage();
+                    territoryWebPage.verifyTerritoryPageScreenDisplay();
+
+                    territoryWebPage.getCustomerName().then(name => {
+                        calendarWebPage.clickCalendarPage()
+                        calendarWebPage.verifyCalendarPageScreenDisplay();
+                        calendarWebPage.clickPreviousDate()
+                        calendarWebPage.clickSingleIcon();
+                        calendarWebPage.verifyCallListLogo();
+                        calendarWebPage.clickScheduleCallIcon();
+                        calendarWebPage.verifyScheduleCallLogo();
+                        calendarWebPage.inputCustomerNameTextBox(name);
+                        calendarWebPage.selectCustomerName();
+                        calendarWebPage.selectStartTimeDropDown();
+                        calendarWebPage.selectPurposeDropDown();
+                        calendarWebPage.clickAddButton();
+                        calendarWebPage.verifyCreateScheduleCallSuccessToast();
+                    });
+                    calendarWebPage.clickInStoreCall();
+                    calendarWebPage.verifyInfoCallLogo();
+                    calendarWebPage.clickReportCallButton();
+                    calendarWebPage.verifyReportCallLogo();
+                    calendarWebPage.selectGeneralOutcomes();
+                    calendarWebPage.clickUpdateCallButton();
+                    calendarWebPage.verifyReportCallSuccessToast();
+                    calendarWebPage.verifyCalendarPageScreenDisplay();
                 }
             })
 
+            calendarWebPage.clickReportedInStoreCall();
+            calendarWebPage.verifyInfoCallLogo();
+            let url = 'https://staging-entity.azurewebsites.net/api/v1/call/callOutcomeType?accountType=1'
+
+            let requestBody = {
+                method: 'GET',
+                url: url,
+                headers: Common.getApiHeader(),
+            }
+
+            let apiScheduleList
+            cy.request(requestBody).then(req => {
+                apiScheduleList = req.body.data
+                apiScheduleList = apiScheduleList.map(api => {
+                    return {
+                        name: api.name.trim(),
+                    }
+                })
+
+                calendarWebPage.clickEditButton();
+                calendarWebPage.verifyUpdateReportedCallScreenDisplay();
+                calendarWebPage.getOutComeList().then(getName => {
+                    expect(getName.length).to.be.deep.eq(apiScheduleList.length)
+                })
+            })
+        });
+
+        it('Get list Calendar Shared: getMyShareCalendars', function () {
+            calendarWebPage.clickShareIcon();
+            calendarWebPage.verifyShareScreenDisplay();
+            calendarWebPage.checkDeleteEmployee();
+            calendarWebPage.inputValidNameEmailTextBox("ab");
+            calendarWebPage.verifyNameEmailList();
+            calendarWebPage.selectShareValueDropDown();
+            calendarWebPage.clickShareButton();
+
+            let url = 'https://staging-entity.azurewebsites.net/api/v1/Call/getMySharedCalendars'
+
+            let requestBody = {
+                url: url,
+                method: 'GET',
+                headers: Common.getApiHeader()
+            }
+
+            let apiShare
+            cy.request(requestBody).then(req => {
+                apiShare = req.body.data
+                apiShare = apiShare.map(api => {
+                    return {
+                        fullName: api.firstName + " " + api.lastName
+                    }
+                })
+
+                calendarWebPage.getShareList().then($shareList => {
+                    expect(apiShare).to.be.deep.eq($shareList)
+                })
+            })
+            calendarWebPage.checkDeleteEmployee();
+            calendarWebPage.clickDeleteShareButton();
+        });
+
+        it('Get list all of Product: callProducts', function () {
             calendarWebPage.clickSingleIcon();
             calendarWebPage.verifyCallListLogo();
             calendarWebPage.clickScheduleCallIcon();
             calendarWebPage.verifyScheduleCallLogo();
-            calendarWebPage.clickPurposeDropDown();
 
-            calendarWebPage.getAllPurpose().then(purposeList => {
-                cy.wrap('').then(() => {
-                    // Check lại data
-                    // expect(purposeList).to.be.deep.eq(getPurposeApiList);
-                    expect(purposeList.length).to.be.deep.eq(getPurposeApiList.length);
+            let url = 'https://staging-entity.azurewebsites.net/api/v1/call/callProducts?accountType=1'
+
+            let requestBody = {
+                url: url,
+                method: 'GET',
+                headers: Common.getApiHeader()
+            }
+
+            let productApi
+            cy.request(requestBody).then(req => {
+                productApi = req.body.data
+                productApi = productApi.map(api => {
+                    return {
+                        productName: api.name
+                    }
+                })
+
+                calendarWebPage.getProductListApi().then(productList => {
+                    expect(productApi).to.be.deep.eq(productList)
                 })
             })
-        })
-    });
+        });
 
-    it('Get list schedule call by day: SearchCalendarEvents', function () {
-        cy.wait(1000)
-        let url = 'https://staging-entity.azurewebsites.net/api/v1/Activity/SearchCalendarEvents'
-        let body = {"startDate":"2023-06-22T17:00:00.000Z","endDate":"2023-06-23T16:59:59.999Z","employeeId":853}
+        it('Get activity List: activityType', function () {
+            let url = 'https://staging-entity.azurewebsites.net/api/v1/activity/activityType'
 
-        let requestBody = {
-            method: 'POST',
-            url: url,
-            headers: Common.getApiHeader(),
-            body: body
-        }
-
-        let apiScheduleList
-        cy.request(requestBody).then(req => {
-            apiScheduleList = req.body.data
-            apiScheduleList = apiScheduleList.map(api => {
-                return {
-                    name: api.accountName.trim(),
-                }
-            })
-
-            calendarWebPage.clickPreviousDate()
-            calendarWebPage.getScheduleName().then(getName => {
-                expect(getName).to.be.deep.eq(apiScheduleList)
-            })
-        })
-    });
-
-    it('Get list Outcomes of Call: callOutcomeType', function () {
-        calendarWebPage.clickPreviousDate()
-        calendarWebPage.verifyCalendarPageScreenDisplay();
-        cy.contains('Reported: In-store').should(() => {
-        }).then($callReported => {
-            if(!$callReported.length) {
-                territoryWebPage.clickTerritoryPage();
-                territoryWebPage.verifyTerritoryPageScreenDisplay();
-
-                territoryWebPage.getCustomerName().then(name => {
-                    calendarWebPage.clickCalendarPage()
-                    calendarWebPage.verifyCalendarPageScreenDisplay();
-                    calendarWebPage.clickPreviousDate()
-                    calendarWebPage.clickSingleIcon();
-                    calendarWebPage.verifyCallListLogo();
-                    calendarWebPage.clickScheduleCallIcon();
-                    calendarWebPage.verifyScheduleCallLogo();
-                    calendarWebPage.inputCustomerNameTextBox(name);
-                    calendarWebPage.selectCustomerName();
-                    calendarWebPage.selectStartTimeDropDown();
-                    calendarWebPage.selectPurposeDropDown();
-                    calendarWebPage.clickAddButton();
-                    calendarWebPage.verifyCreateScheduleCallSuccessToast();
-                });
-                calendarWebPage.clickInStoreCall();
-                calendarWebPage.verifyInfoCallLogo();
-                calendarWebPage.clickReportCallButton();
-                calendarWebPage.verifyReportCallLogo();
-                calendarWebPage.selectGeneralOutcomes();
-                calendarWebPage.clickUpdateCallButton();
-                calendarWebPage.verifyReportCallSuccessToast();
-                calendarWebPage.verifyCalendarPageScreenDisplay();
+            let responseBody = {
+                url: url,
+                method: 'GET',
+                headers: Common.getApiHeader()
             }
-        })
 
-        calendarWebPage.clickReportedInStoreCall();
-        calendarWebPage.verifyInfoCallLogo();
-        cy.wait(1000)
-        let url = 'https://staging-entity.azurewebsites.net/api/v1/call/callOutcomeType?accountType=1'
+            calendarWebPage.clickSingleIcon();
+            calendarWebPage.verifyCallListLogo();
+            calendarWebPage.clickScheduleActivityIcon();
+            calendarWebPage.verifyScheduleActivityLogo();
+            calendarWebPage.clickActivityDropDown();
 
-        let requestBody = {
-            method: 'GET',
-            url: url,
-            headers: Common.getApiHeader(),
-        }
+            let activityList
+            cy.request(responseBody).then(req => {
+                activityList = req.body.data
+                activityList = activityList.map(api => {
+                    return {
+                        activityType: api.label.replace("Text", "")
+                    }
+                })
 
-        let apiScheduleList
-        cy.request(requestBody).then(req => {
-            apiScheduleList = req.body.data
-            apiScheduleList = apiScheduleList.map(api => {
-                return {
-                    name: api.name.trim(),
-                }
+                calendarWebPage.getActivityType().then(activity => {
+                    expect(activity.length).to.be.deep.eq(activityList.length)
+                })
             })
+        });
 
-            calendarWebPage.clickEditButton();
-            calendarWebPage.verifyUpdateReportedCallScreenDisplay();
-            calendarWebPage.getOutComeList().then(getName => {
-                expect(getName.length).to.be.deep.eq(apiScheduleList.length)
+        it('Get phone Call list: callMethod', function () {
+            let url = 'https://staging-entity.azurewebsites.net/api/v1/call/callMethod?accountType=1'
+            let responseBody = {
+                url: url,
+                method: 'GET',
+                headers: Common.getApiHeader()
+            }
+
+            let callMethod
+            cy.request(responseBody).then(req => {
+                callMethod = req.body.data
+                callMethod = callMethod.map(api => {
+                    return {
+                        callname: api.name
+                    }
+                })
+
+                calendarWebPage.clickSingleIcon();
+                calendarWebPage.verifyCallListLogo();
+                calendarWebPage.clickScheduleCallIcon();
+                calendarWebPage.verifyScheduleCallLogo();
+                calendarWebPage.clickRemoteType();
+
+                calendarWebPage.getCallMethod().then(callMethod => {
+                    expect(callMethod).to.be.deep.eq(callMethod)
+                })
             })
-        })
-    });
+        });
 
-    it('Get list Calendar Shared: getMyShareCalendars', function () {
-        calendarWebPage.clickShareIcon();
-        calendarWebPage.verifyShareScreenDisplay();
-        calendarWebPage.inputValidNameEmailTextBox();
-        calendarWebPage.verifyNameEmailList();
-        calendarWebPage.selectShareValueDropDown();
-        calendarWebPage.clickShareButton();
+        it('Get employee share calendar: employee', function () {
+            calendarWebPage.clickShareIcon();
+            calendarWebPage.verifyShareScreenDisplay();
+            calendarWebPage.inputValidNameEmailTextBox("a");
+            calendarWebPage.verifyNameEmailList();
 
-        let url = 'https://staging-entity.azurewebsites.net/api/v1/Call/getMySharedCalendars'
+            let url = 'https://staging-entity.azurewebsites.net/api/v1/company/462/employee?text=a&pageIndex=1'
+            let responseBody = {
+                url: url,
+                method: 'GET',
+                headers: Common.getApiHeader()
+            }
 
-        let requestBody = {
-            url: url,
-            method: 'GET',
-            headers: Common.getApiHeader()
-        }
+            let employeeShare
+            cy.request(responseBody).then(req => {
+                employeeShare = req.body.data.results
+                employeeShare = employeeShare.map(api => {
+                    return {
+                        employeeName: api.firstName + " " + api.lastName
+                    }
+                })
 
-        let apiShare
-        cy.request(requestBody).then(req => {
-            apiShare = req.body.data
-            apiShare = apiShare.map(api => {
-                return {
-                    fullName : api.firstName + " " + api.lastName
-                }
+                calendarWebPage.getEmployeeShare().then(employee => {
+                    expect(employee).to.be.deep.eq(employeeShare)
+                })
             })
-
-            calendarWebPage.getShareList().then($shareList => {
-                expect(apiShare).to.be.deep.eq($shareList)
-            })
-        })
-        calendarWebPage.clickDeleteShareButton();
-    });
-
-    it('Get list all of Product: callProducts', function () {
-        calendarWebPage.clickSingleIcon();
-        calendarWebPage.verifyCallListLogo();
-        calendarWebPage.clickScheduleCallIcon();
-        calendarWebPage.verifyScheduleCallLogo();
-
-        let url = 'https://staging-entity.azurewebsites.net/api/v1/call/callProducts?accountType=1'
-
-        let requestBody = {
-            url : url,
-            method: 'GET',
-            headers: Common.getApiHeader()
-        }
-
-        let productApi
-        cy.request(requestBody).then(req => {
-            productApi = req.body.data
-            productApi = productApi.map(api => {
-                return {
-                    productName : api.name
-                }
-            })
-
-            calendarWebPage.getProductListApi().then(productList => {
-                expect(productApi).to.be.deep.eq(productList)
-            })
-        })
-    });
+        });
+    }
 
 
 //     let verifyNotEmpty = (name, data) => {

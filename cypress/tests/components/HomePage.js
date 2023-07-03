@@ -10,20 +10,6 @@ describe('Home Page', () => {
         homeWebPage.verifyHomePageScreen()
     })
 
-    it('Click to view profile', function () {
-        homeWebPage.clickMyProfile()
-        homeWebPage.verifyEmployeePageScreen()
-        homeWebPage.clickEditProfileButton()
-        homeWebPage.verifyEditInfoScreen()
-        homeWebPage.clickCancelButton()
-        homeWebPage.verifyEmployeePageScreen()
-        homeWebPage.clickEditProfileButton()
-        homeWebPage.verifyEditInfoScreen()
-        homeWebPage.inputEmailTextBox()
-        homeWebPage.clickUpdateButton()
-        homeWebPage.verifyUpdateSuccessToast()
-    });
-
     it('Fall back KPI', function () {
         cy.wait(1000)
         homeWebPage.fallBackKpi()
@@ -46,8 +32,17 @@ describe('Home Page', () => {
         homeWebPage.compareKpiValue('Average Sales / Day (MTD)')
     });
 
-    // it('Compare data on CRM and Logi', function () {
-    //     cy.wait(1000)
-    //     homeWebPage.logi_Crm()
-    // });
+    it('Click to view profile', function () {
+        homeWebPage.clickMyProfile()
+        homeWebPage.verifyEmployeePageScreen()
+        homeWebPage.clickEditProfileButton()
+        homeWebPage.verifyEditInfoScreen()
+        homeWebPage.clickCancelButton()
+        homeWebPage.verifyEmployeePageScreen()
+        homeWebPage.clickEditProfileButton()
+        homeWebPage.verifyEditInfoScreen()
+        homeWebPage.inputEmailTextBox()
+        homeWebPage.clickUpdateButton()
+        homeWebPage.verifyUpdateSuccessToast()
+    });
 });

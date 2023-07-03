@@ -204,6 +204,34 @@ class TerritoryWebPage {
         })
     }
 
+    clickSegmentFiltersIcon() {
+        cy.get('[data-testid="header-column-segments"]').should(() => {
+        }).then($segmentHeader => {
+            if(!$segmentHeader.length) {
+                this.clickTableOptions()
+                this.verifyTableOptionsScreen()
+                cy.get('[data-testid="table-option-item-57"] button[data-testid*="switch"]').click()
+                this.clickOkButton()
+                this.verifyTerritoryPageScreenDisplay();
+            }
+            cy.get('[data-testid="filter-segments-icon"]').click()
+        })
+    }
+
+    clickSubAreaFiltersIcon() {
+        cy.get('[data-testid="header-column-subarea"]').should(() => {
+        }).then($subAreaHeader => {
+            if(!$subAreaHeader.length) {
+                this.clickTableOptions()
+                this.verifyTableOptionsScreen()
+                cy.get('[data-testid="table-option-item-55"] button[data-testid*="switch"]').click()
+                this.clickOkButton()
+                this.verifyTerritoryPageScreenDisplay();
+            }
+            cy.get('[data-testid="filter-subarea-icon"]').click()
+        })
+    }
+
     clickTypeFiltersIcon() {
         cy.get('[data-testid="header-column-segmentTypes"]').should(() => {
         }).then($type => {
@@ -663,6 +691,36 @@ class TerritoryWebPage {
 
         return new Cypress.Promise(resolve => {
             cy.wrap('').then(() => resolve(territory));
+        })
+    }
+
+    getSegmentList() {
+        let segmentList = []
+        cy.get('[data-testid="filter-segments-content"] [class="truncate"]').each($segment => {
+            let segmentName = {}
+            cy.wrap($segment).then(segment => {
+                segmentName.segmentApi = segment.text().trim()
+                segmentList.push(segmentName)
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(segmentList))
+        })
+    }
+
+    getSubAreaList() {
+        let subAreaList = []
+        cy.get('[data-testid="filter-subarea-content"] [class="truncate"]').each($subArea => {
+            let subAreaName = {}
+            cy.wrap($subArea).then(subArea => {
+                subAreaName.subAreaApi = subArea.text().trim()
+                subAreaList.push(subAreaName)
+            })
+        })
+
+        return new Cypress.Promise(resolve => {
+            cy.wrap('').then(() => resolve(subAreaList))
         })
     }
 

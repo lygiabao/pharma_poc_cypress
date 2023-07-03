@@ -45,7 +45,7 @@ module.exports = defineConfig({
     specPattern: "./cypress/tests/*/*",
     experimentalSessionAndOrigin: true
   },
-  defaultCommandTimeout: 10000
+  defaultCommandTimeout: 5000
 });
 
 

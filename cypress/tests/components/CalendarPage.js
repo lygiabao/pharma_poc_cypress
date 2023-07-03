@@ -29,8 +29,8 @@ describe('Calendar Page', () => {
         calendarWebPage.verifyInfoCallLogo();
         calendarWebPage.clickReportCallButton();
         calendarWebPage.verifyReportCallLogo();
-        calendarWebPage.selectGeneralOutcomes();
         calendarWebPage.checkSelectPurpose();
+        calendarWebPage.selectGeneralOutcomes();
         calendarWebPage.clickUpdateCallButton();
         calendarWebPage.verifyReportCallSuccessToast();
         calendarWebPage.verifyCalendarPageScreenDisplay();
@@ -266,7 +266,7 @@ describe('Calendar Page', () => {
         calendarWebPage.verifyShareScreenDisplay();
         calendarWebPage.inputInValidNameEmailTextBox();
         calendarWebPage.verifyNameEmailList();
-        calendarWebPage.inputValidNameEmailTextBox();
+        calendarWebPage.inputValidNameEmailTextBox("ab");
         calendarWebPage.verifyNameEmailList();
         calendarWebPage.selectShareValueDropDown();
         calendarWebPage.clickShareButton();
@@ -334,7 +334,7 @@ describe('Calendar Page', () => {
         });
     });
 
-    it.only('Create new Schedule call with Remote type: any day list', function () {
+    it('Create new Schedule call with Remote type: any day list', function () {
         clickTerritoryPage();
         territoryWebPage.getCustomerName().then(name => {
             calendarWebPage.clickCalendarPage()
