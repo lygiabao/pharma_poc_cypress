@@ -1,6 +1,8 @@
 mochawesome-report/*
 node_modules/*
 node_modules
+cypress/node_modules
+cypress/node_modules/*
 cypress/results/*
 cypress/screenshots/
 cypress/videos/
