@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn test
+  /usr/local/bin/node /usr/local/bin/yarn add - save-dev cypress-cucumber-preprocessor
 
 PATH: 
   /opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:~/.dotnet/tools:/Users/lygiabao/Documents/pharma_poc_cypress/node_modules/.bin
@@ -14,12 +14,15 @@ Platform:
   darwin x64
 
 Trace: 
-  SyntaxError: /Users/lygiabao/Documents/pharma_poc_cypress/package.json: Unexpected token } in JSON at position 983
-      at JSON.parse (<anonymous>)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:1629:59
-      at Generator.next (<anonymous>)
-      at step (/usr/local/lib/node_modules/yarn/lib/cli.js:310:30)
-      at /usr/local/lib/node_modules/yarn/lib/cli.js:321:13
+  Error: https://registry.npmjs.org/-: tunneling socket could not be established, cause=getaddrinfo ENOTFOUND proxydomain
+      at ClientRequest.onError (/usr/local/lib/node_modules/yarn/lib/cli.js:152376:17)
+      at Object.onceWrapper (node:events:628:26)
+      at ClientRequest.emit (node:events:513:28)
+      at Socket.socketErrorListener (node:_http_client:502:9)
+      at Socket.emit (node:events:513:28)
+      at emitErrorNT (node:internal/streams/destroy:151:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:116:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
 
 npm manifest: 
   {
@@ -31,14 +34,16 @@ npm manifest:
       "open": "cypress open",
       "dev": "cypress run",
       "test": "cypress run --browser chrome --headed",
+  
       "test:mocha-reporter": "yarn test --reporter mochawesome --reporter-options reportDir=\"cypress/results\",overwrite=false,html=false,json=true",
       "merge-report": "mochawesome-merge \"cypress/results/*.json\" > index.json",
       "build-report": "marge index.json",
       "open-report": "yarn merge-report && yarn build-report && serve mochawesome-report",
+  
       "cy:parallel-multi": "cypress-parallel -d cypress/tests/api/ -t 2 -s test --reporter cypress-multi-reporters --reporter-options configFile=reporter-config.json",
   
       "allure-report": "cypress run --browser chrome --spec cypress/tests/api/Home_Api.js --env allure=true --reporter mocha-allure-reporter",
-      "merge-open-allure": "allure generate allure-results --clean -o allure-report && yarn allure-open",
+      "merge-open-allure": "allure generate allure-results --clean -o allure-report && yarn allure-open"
     },
     "keywords": [],
     "author": "",

@@ -27,12 +27,14 @@
 
 const { defineConfig } = require('cypress');
 const allureWriter = require('@shelex/cypress-allure-plugin/writer');
+// const cucumber = require('cypress-cucumber-preprocessor').default;
 
 module.exports = defineConfig({
   reporter: 'cypress-mochawesome-reporter',
   video: false,
   e2e: {
     setupNodeEvents(on, config) {
+      // on('file:preprocessor', cucumber());
       screenshotOnRunFailure = true;
       require('cypress-mochawesome-reporter/plugin')(on);
       allureWriter(on, config);
@@ -43,6 +45,7 @@ module.exports = defineConfig({
     projectId: "pharma_poc",
     "overwrite": false,
     specPattern: "./cypress/tests/*/*",
+    // specPattern: "**/*.feature",
     experimentalSessionAndOrigin: true
   },
   defaultCommandTimeout: 5000

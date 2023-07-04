@@ -32,10 +32,17 @@
     "serve": "^14.2.0"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "allure-mocha": "^2.4.0",
     "cy2": "^4.0.6",
     "cypress-cloud": "^1.7.4",
+    "cypress-cucumber-preprocessor": "^4.3.1",
     "cypress-parallel": "^0.13.0",
-    "parallel": "^1.2.0"
+    "parallel": "^1.2.0",
+    "save-dev": "^0.0.1-security"
+  },
+
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true
   }
 }

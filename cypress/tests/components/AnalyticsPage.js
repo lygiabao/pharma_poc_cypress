@@ -10,13 +10,7 @@
 //         homeWebPage.verifyHomePageScreen()
 //     })
 //
-//     const getIframeDocument = () => {
-//         return cy.get('iframe[onload*="EmbeddedReporting"]').its('0.contentDocument').should('exist')
-//     }
 //
-//     const getIframeBody = () => {
-//         return getIframeDocument().its('body').should('not.be.undefined').then(cy.wrap)
-//     }
 //
 //     it('gets the post',{defaultCommandTimeout: 25000}, () => {
 //         homeWebPage.clickAnalyticPage()
